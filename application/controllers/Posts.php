@@ -174,9 +174,7 @@ class Posts extends CI_Controller {
 		
 		if($files != NULL || $this->input->post('posts') != NULL){
 			$posts = $this->convert($this->input->post('posts'));
-
 			$data = $this->post_model->create_post($this->input->post('course_ID'), $files, $posts, $this->session->userdata('user_id'), $tagged_users_id);
-
 			$status = $this->post_model->get_review_status();
 			if($status['review_post_status'] == 0){
 				$this->session->set_flashdata('success', 'Gained 3 exp!');
@@ -202,7 +200,6 @@ class Posts extends CI_Controller {
 		} else {
 			$this->session->set_flashdata('error', 'Enter a posts!');
 		}
-
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
@@ -321,14 +318,13 @@ class Posts extends CI_Controller {
 			$total_likes = $this->post_model->total_likes($row['post_ID']);
 			$total_comments = $this->post_model->total_comments($row['post_ID']);
 			$images = $this->post_model->get_post_files($row['post_ID']);
-			$courses = $this->post_model->get_post_to_course($row['post_ID']);
+			$course = $this->course_model->get_course(NULL, NULL, 0, '1', $row['course_ID']);
 			$all_images = array();
-			$all_courses = array();
 
-			foreach ($courses as $course) {
-				$all_courses[] = array(
-					'course_title' =>  ($course['title'] == "") ? 'Global' : ucfirst($course['title']),
-				);
+			if(empty($course)){
+				$course_title = 'Global';
+			} else {
+				$course_title = ucfirst($course['title']);
 			}
 
 			foreach ($images as $image) { 
@@ -344,7 +340,7 @@ class Posts extends CI_Controller {
 			$numbers = rand(-100000,1000000).$row['post_ID'];
 
 			$data[] = array(
-				'title' => $all_courses,
+				'title' => $course_title,
 				'numbers' => $numbers,
 				'post_ID' => $row['post_ID'],
 				'post_status' => $row['post_status'],

@@ -61,7 +61,7 @@ $(document).ready(function(){
   create_ckeditor('posts');
   liked();
   liked_comments();
-  $('.swipebox').swipebox();
+  //$('.swipebox').swipebox();
   create_popover();
 
   <?php 
@@ -273,7 +273,7 @@ $(document).ready(function(){
           if (data[i].user_ID == <?php echo $my_info['id']?>){
             html +=  '<a class="float-right red-text m-1"><i class="fas fa-times delete_comment fa-xs" data-comment-id="'+data[i].comment_ID+'" data-post-id="'+data[i].post_ID+'"></i></a>';
           }
-          html += '</h6>'+data[i].comment;
+          html += '</h6><div class="text-break">'+data[i].comment+'</div>';
           if (data[i].comment_image != "") {
             html += '<div class="mt-2 h-50"><div class="d-flex"><a rel="gallery_'+data[i].comment_ID+'" href="'+data[i].comment_image+'" class="swipebox"><img src="'+data[i].comment_image_thumbs+'" class="img-fluid img-thumbnail" style="width: 200px;"></a></div></div>';
           }
@@ -398,7 +398,7 @@ $(document).ready(function(){
           if (data[i].user_ID == <?php echo $my_info['id']; ?> || data[i].owner_post == <?php echo $my_info['id']; ?>){
             html += '<a class="float-right red-text m-1"><i class="fas fa-times delete_comment fa-xs" data-comment-id="'+data[i].comment_ID+'" data-post-id="'+data[i].post_ID+'"></i></a>';
           }
-          html += '</h6>'+data[i].comment;
+          html += '</h6><div class="text-break">'+data[i].comment+'</div>';
           if (data[i].comment_image != "") {
             html += '<div class="mt-2 h-50"><div class="d-flex"><a rel="gallery_'+data[i].comment_ID+'" href="'+data[i].comment_image+'" class="swipebox"><img src="'+data[i].comment_image_thumbs+'" class="img-fluid img-thumbnail" style="width: 200px;"></a></div></div>';
           }
@@ -467,10 +467,9 @@ $(document).ready(function(){
           var i;
           for(i=0; i<data.length; i++){
             html += '<div class="card mb-4 posts post_id_'+data[i].post_ID+'"><div class="media mt-2"><img class="rounded-circle ml-2 card-img-100 d-flex z-depth-1 mr-2 chat-mes-id" src="'+data[i].image+'" style="height: 50px; width: 50px" alt="Profile photo" onerror="this.onerror=null;this.src=\'<?php echo base_url();?>assets/img/users/stock.jpg\';"><div class="media-body"><h5><a class="text-dark profile_popover" href="<?php echo base_url(); ?>'+data[i].username+'" data-user-id="'+data[i].user_ID+'">'+data[i].first_name+' '+data[i].last_name+'</a>';
-            var title = data[i].title;
-            for(var r =0; r<title.length; r++){
-              html += '<span class="ml-1 mr-2"><small style="font-size: 14px; font-weight: 600;">#'+title[r].course_title+'</small></span>';
-            }
+
+              html += '<span class="ml-1 mr-2"><small style="font-size: 14px; font-weight: 600;">#'+data[i].title+'</small></span>';
+            
             if (data[i].user_ID == <?php echo $my_info['id']; ?>){
               html += '<a class="float-right mr-2 post_popover" data-toggle="popover" alt="'+data[i].post_ID+'" data-post-id="'+data[i].post_ID+'" data-pin="'+data[i].pin+'"><i class="fas fa-ellipsis-v"></i></span></a>';
             }

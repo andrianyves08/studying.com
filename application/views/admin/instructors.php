@@ -57,13 +57,14 @@ $(document).ready(function() {
   $(document).on("click", ".approve", function() { 
     var name=$(this).data('name');
     var user_ID=$(this).data('user-id');
+    var id=$(this).data('id');
     alert_sound.play();
     if(confirm("Are you sure you want to approve "+name+" an Instructor?")){
       $.ajax({
         type : "POST",
         url  : "<?=base_url()?>users/approve_as_instructor",
         dataType : "JSON",
-        data : {user_ID:user_ID},
+        data : {user_ID:user_ID, id:id},
         success: function(data){
           location.reload();
         }
@@ -74,13 +75,14 @@ $(document).ready(function() {
   $(document).on("click", ".deny", function() { 
     var name=$(this).data('name');
     var user_ID=$(this).data('user-id');
+    var id=$(this).data('id');
     alert_sound.play();
     if(confirm("Are you sure you want to deny "+name+" an Instructor?")){
       $.ajax({
         type : "POST",
         url  : "<?=base_url()?>users/deny_as_instructor",
         dataType : "JSON",
-        data : {user_ID:user_ID},
+        data : {user_ID:user_ID, id:id},
         success: function(data){
           location.reload();
         }

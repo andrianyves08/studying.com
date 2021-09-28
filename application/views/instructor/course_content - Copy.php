@@ -1,145 +1,153 @@
+<style type="text/css">
+.dropdown-menu {         
+  max-height: 500px;
+  overflow-y: auto;
+}
+</style>
 <main class="pt-5 mx-lg-5">
-<div class="container-fluid mt-5">
-  <div class="card mb-4 wow fadeIn">
-    <div class="card-body d-sm-flex justify-content-between">
-      <h4 class="mb-2 mb-sm-0 pt-1">
-        <span><a href="<?php echo base_url();?>instructor">Home</a></span>
-        <span>/</span>
-        <span><a href="<?php echo base_url();?>instructor/course">Course</a></span>
-        <span>/</span>
-        <span><a href="<?php echo base_url();?>instructor/course/<?php echo ucwords($course['slug']);?>"><?php echo ucwords($course['title']);?></a></span>
-        <span>/</span>
-        <span><?php echo ucwords($module['title']);?></span>
-      </h4>
-    </div>
-  </div>
-  <!-- Heading -->
-  <div class="row">
-    <div class="col-md-12 mb-4">
-      <div class="accordion md-accordion accordion-blocks" id="accordionEx78" role="tablist" aria-multiselectable="true">
-        <?php foreach ($sections as $section) {?>
-        <div data-section-id="<?php echo $section['id']; ?>" class="card sortsection">
-          <div class="card-header" role="tab" id="mainsection<?php echo $section['id'];?>">
-            <div class="float-right">
-              <?php if($section['status'] == 1){ ?>
-                <span class="badge badge-pill mr-2 badge-info">Active</span>
+  <div class="container-fluid mt-5">
+    <div class="card mb-4 wow fadeIn">
+      <div class="card-body d-sm-flex justify-content-between">
+        <h4 class="mb-2 mb-sm-0 pt-1">
+          <span><a href="<?php echo base_url();?>instructor">Home</a></span>
+          <span>/</span>
+          <span><a href="<?php echo base_url();?>instructor/course">Course</a></span>
+          <span>/</span>
+          <a class="dropdown-toggle mr-4 dropdown-menu-right" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo ucwords($module['title']);?></a>
+          <div class="dropdown-menu">
+            <?php foreach ($modules as $value) { ?>
+              <?php if ($value['title'] == $module['title']) { ?>
+                <a class="dropdown-item blue-text" href="<?php echo base_url(); ?>instructor/course/<?php echo $course['slug'];?>/<?php echo $value['slug']; ?>"><?php echo $value['title']; ?></a>
               <?php } else { ?>
-                <span class="badge badge-pill mr-2 badge-warning">Hidden</span>
+                <a class="dropdown-item" href="<?php echo base_url(); ?>instructor/course/<?php echo $course['slug'];?>/<?php echo $value['slug']; ?>"><?php echo $value['title']; ?></a>
               <?php } ?>
-              <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                <a type="button" class="btn btn-primary btn-sm edit_section" data-id="<?php echo $section['id'];?>"><i class="fas fa-pencil-alt"></i></a>
-                <button type="button" class="btn btn-danger btn-sm delete_section" data-id="<?php echo $section['id'];?>"><i class="fas fa-trash-alt"></i></button>
-                <a type="button" class="btn btn-secondary btn-sm copy_section" data-id="<?php echo $section['id'];?>"><i class="fas fa-copy"></i></a>
-              </div>
-            </div>
-            <a data-toggle="collapse" data-parent="#accordionEx78" href="#section<?php echo $section['id'];?>" aria-expanded="true"
-              aria-controls="section<?php echo $section['id'];?>">
-              <h3 class="mt-1 mb-0">
-                <span style="cursor: all-scroll;"><?php echo $section['title'];?></span>
-                <i class="fas fa-angle-down rotate-icon"></i>
-              </h3>
-            </a>
-          </div><!-- Card Header -->
-          <div id="section<?php echo $section['id'];?>" class="collapse show" role="tabpanel" aria-labelledby="mainsection<?php echo $section['id'];?>"
-            data-parent="#accordionEx78">
-            <div class="card-body sortablelessons">
-              <?php foreach ($lessons as $lesson) {?>
-                <?php if ($section['id'] == $lesson['section_ID']) {?>
-                  <div class="accordion md-accordion sortlessons" id="mainlesson<?php echo $lesson['id'];?>" role="tablist" aria-multiselectable="true" style="padding-left: 15px;" data-lesson-id="<?php echo $lesson['id']; ?>">
-                    <div class="float-right">
-                      <?php if($lesson['status'] == 1){ ?>
-                        <span class="badge badge-pill mr-2 badge-info">Active</span>
-                      <?php } else { ?>
-                        <span class="badge badge-pill mr-2 badge-warning">Hidden</span>
-                      <?php } ?>
-                      <a class="add_content" data-lesson-id="<?php echo $lesson['id'];?>"><i class="fas fa-plus green-text"></i></a>
-                      <a class="edit_lesson" data-id="<?php echo $lesson['id'];?>"><i class="fas fa-pencil-alt blue-text"></i></a>
-                      <a class="delete_lesson" data-id="<?php echo $lesson['id'];?>"><i class="fas fa-trash-alt red-text"></i></a>
-                      <a class="copy_lesson" data-id="<?php echo $lesson['id'];?>"><i class="fas fa-copy text-secondary"></i></a>
-                    </div>
-                    <a data-toggle="collapse" data-parent="#mainlesson<?php echo $lesson['id'];?>" href="#lesson<?php echo $lesson['id'];?>" aria-expanded="true"
-                      aria-controls="lesson<?php echo $lesson['id'];?>">
-                      <h4 class="mt-1 mb-0">
-                        <span style="cursor: all-scroll;"><?php echo $lesson['title'];?></span>
-                         <i class="fas fa-angle-down rotate-icon"></i>
-                      </h4>
-                    </a>
-                    <div id="lesson<?php echo $lesson['id'];?>" class="collapse show" role="tabpanel" aria-labelledby="mainsection<?php echo $section['id'];?>" data-parent="#mainlesson<?php echo $lesson['id'];?>">              
-                      <div class="sortablecontent" style="padding-left: 25px;">
+            <?php } ?> 
+          </div>
+        </h4>
+        <h4 class="mb-2 mb-sm-0 pt-1 float-right">
+          <span><a href="<?php echo base_url();?>instructor/course/<?php echo $course['slug'];?>">Back</a></span>
+        </h4>
+      </div>
+    </div>
+
+    <div class="row mb-4 justify-content-center">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="hidden" class="form-control" id="module_ID" value="<?php echo $module['id'];?>">
+          <input type="text" class="form-control" placeholder="Enter Section Title" aria-label="Section" aria-describedby="button-addon2" id="create_section_title">
+          <div class="input-group-append">
+            <button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect" id="create_section">Create Section</button>
+          </div>
+        </div>
+      </div><!--Column-->
+      <div class="col-md-3">
+        <a href="<?php echo base_url();?>instructor/course/edit/<?php echo $course['slug'];?>/<?php echo $module['slug'];?>" class="btn btn-primary m-0 px-3 py-2 z-depth-0 waves-effect">Edit All Contents</a>
+        <a href="<?php echo base_url();?>course/<?php echo $course['slug'];?>/<?php echo $module['slug'];?>" class="btn btn-info m-0 px-3 py-2 z-depth-0 waves-effect" target="_blank"><i class="fas fa-eye"></i> Preview</a>
+        
+      </div><!--Column-->
+      <div class="col-md-3">
+        Hide All
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input status_switch" id="status_switch" <?php echo ($module['status'] == '1') ? 'checked' : '' ?> data-id="<?php echo $module['id'];?>">
+          <label class="custom-control-label" for="status_switch">
+            <?php if($module['status'] == '0'){?>
+              <span class="badge badge-pill badge-warning status_switch_label">Hidden</span>
+            <?php } else { ?>
+              <span class="badge badge-pill badge-success status_switch_label">Active</span>
+            <?php } ?>
+          </label>
+        </div>
+      </div>
+    </div><!--Row-->
+
+    <div class="row">
+      <div class="col-md-12 mb-4">
+        <div class="accordion md-accordion accordion-blocks sections" id="section_accordion" role="tablist" aria-multiselectable="true">
+          <?php foreach ($sections as $section){ ?>
+            <div data-section-id="<?php echo $section['id']; ?>" class="card sortsection section_<?php echo $section['id']; ?>">
+              <div class="card-header d-flex justify-content-between" role="tab" id="mainsection_<?php echo $section['id']; ?>">
+                <a data-toggle="collapse" href="#section_<?php echo $section['id']; ?>" aria-expanded="true" aria-controls="section_<?php echo $section['id']; ?>">
+                  <h3 class="mt-1 mb-0">
+                    <span style="cursor: all-scroll;" id="section_title_<?php echo $section['id'];?>"><?php echo $section['title'];?></span>
+                    <i class="fas fa-angle-down rotate-icon"></i>
+                  </h3>
+                </a>
+                <div>
+                  <?php if($section['status'] == 1){ ?>
+                    <span class="section_status_<?php echo $section['id']; ?> badge badge-pill mr-2 badge-info">Active</span>
+                  <?php } else { ?>
+                    <span class="section_status_<?php echo $section['id']; ?> badge badge-pill mr-2 badge-warning">Hidden</span>
+                  <?php } ?>
+                  <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                    <a type="button" class="btn btn-primary btn-sm edit_section" data-id="<?php echo $section['id']; ?>"><i class="fas fa-pencil-alt"></i></a>
+                    <a type="button" class="btn btn-danger btn-sm delete_section" data-id="<?php echo $section['id']; ?>"><i class="fas fa-trash-alt"></i></a>
+                    <a type="button" class="btn btn-secondary btn-sm copy_section" data-id="<?php echo $section['id']; ?>"><i class="fas fa-copy"></i></a>
+                    <a class="btn btn-info btn-sm" href="<?php echo base_url();?>instructor/course/<?php echo $course['slug'];?>/<?php echo $module['slug'];?>/<?php echo $section['slug'];?>"><i class="fas fa-edit ml-1"></i> Edit Contents</a>
+                  </div>
+                </div><!-- Section Group Buttons-->
+              </div><!-- Card Header -->
+              <div id="section_<?php echo $section['id']; ?>" class="collapse show" role="tabpanel" aria-labelledby="mainsection_<?php echo $section['id']; ?>">
+                <div class="lessons_<?php echo $section['id']; ?> lessons">
+                <?php foreach ($lessons as $lesson) {?>
+                  <?php if ($section['id'] == $lesson['section_ID']) {?>
+                    <div class="accordion md-accordion lesson_accordion pt-2 pl-4 ml-4" id="mainlesson_<?php echo $lesson['id']; ?>" role="tablist" aria-multiselectable="true" data-lesson-id="<?php echo $lesson['id']; ?>">
+                      <div class="d-flex">
+                        <a data-toggle="collapse" data-parent="#mainlesson_<?php echo $lesson['id']; ?>" href="#lesson_<?php echo $lesson['id']; ?>" aria-expanded="true" aria-controls="lesson_<?php echo $lesson['id']; ?>">
+                          <h4><span style="cursor: all-scroll;" id="lesson_title_<?php echo $lesson['id']; ?>"><?php echo $lesson['title']; ?></span><i class="fas fa-angle-down rotate-icon ml-2"></i></h4>
+                        </a>
+                        <div class="ml-4">
+                          <?php if($lesson['status'] == 1){ ?>
+                            <span class="lesson_status_<?php echo $lesson['id']; ?> badge badge-pill mr-2 badge-info">Active</span>
+                          <?php } else { ?>
+                            <span class="lesson_status_<?php echo $lesson['id']; ?> badge badge-pill mr-2 badge-warning">Hidden</span>
+                          <?php } ?>
+                          <a class="edit_lesson" data-id="<?php echo $lesson['id']; ?>"><i class="fas fa-pencil-alt blue-text"></i></a><a class="delete_lesson" data-id="<?php echo $lesson['id']; ?>"><i class="fas fa-trash-alt red-text ml-1"></i></a><a class="copy_lesson" data-id="<?php echo $lesson['id']; ?>"><i class="fas fa-copy text-secondary ml-1"></i></a><a class="add_content green-text ml-1" data-lesson-id="<?php echo $lesson['id'];?>"><i class="fas fa-plus ml-1"></i> Add Content</a>
+                        </div>
+                      </div>
+                      <div id="lesson_<?php echo $lesson['id']; ?>" class="collapse show contents_<?php echo $lesson['id']; ?> contents" role="tabpanel" aria-labelledby="mainsection_<?php echo $section['id']; ?>" data-parent="#mainlesson_<?php echo $lesson['id']; ?>">
                         <?php foreach ($contents as $content) {?>
                           <?php if ($lesson['id'] == $content['lesson_ID']) {?>
-                          <div class="row sortcontent" data-content-id="<?php echo $content['id']; ?>">
-                            <ul class="list-group align-middle" role="tablist" style="padding-left: 25px;">
-                              <li style="cursor: all-scroll; padding: 0;margin: 0;" class="border-bottom sortcontentpart" ><h5><?php echo $content['title'];?></h5> </li>
+                          <div class="row ml-4 pl-4 content_<?php echo $content['id']; ?> content_accordion" data-content-id="<?php echo $content['id']; ?>">
+                            <ul class="list-group align-middle" role="tablist">
+                              <li style="cursor: all-scroll;"><h5 id="content_title_<?php echo $content['id']; ?>"><?php echo $content['title'];?></h5> </li>
                             </ul>
                             <div class="col-4 float-right">
                               <?php if($content['status'] == 1){ ?>
-                                <span class="badge badge-pill mr-2 badge-info">Active</span>
+                                <span class="content_status_<?php echo $content['id']; ?> badge badge-pill mr-2 badge-info">Active</span>
                               <?php } else { ?>
-                                <span class="badge badge-pill mr-2 badge-warning">Hidden</span>
+                                <span class="content_status_<?php echo $content['id']; ?> badge badge-pill mr-2 badge-warning">Hidden</span>
                               <?php } ?>
-                              <a class="edit_content" data-id="<?php echo $content['id'];?>"><i class="fas fa-pencil-alt blue-text"></i></a>
-                              <a class="delete_content" data-id="<?php echo $content['id'];?>"><i class="fas fa-trash-alt red-text"></i></a>
-                              <a class="copy_content" data-id="<?php echo $content['id'];?>" data-section-id="<?php echo $section['id'];?>"><i class="fas fa-copy text-secondary"></i></a>
+                              <a class="edit_content" data-id="<?php echo $content['id']; ?>"><i class="fas fa-pencil-alt blue-text"></i></a><a class="delete_content" data-id="<?php echo $content['id']; ?>"><i class="fas fa-trash-alt red-text ml-1"></i></a><a class="copy_content" data-id="<?php echo $content['id']; ?>" data-section-id="<?php echo $section['id'];?>"><i class="fas fa-copy text-secondary ml-1"></i></a>
                             </div>
                           </div>
                           <?php } ?>
                         <?php } ?>
+                      </div><!-- Lesson Body --> 
+                    </div><!-- Lesson Accordion card -->  
+                  <?php } ?>
+                <?php } ?>
+                </div><!-- Lesson -->  
+                <div class="row m-3">
+                  <div class="col-md-4">
+                    <div class="input-group mb-3">
+                      <input type="text" class="form-control create_lesson_input" placeholder="Lesson Title" aria-label="Lesson Title" aria-describedby="button-addon2" id="lesson_title_<?php echo $section['id'];?>" data-section-id="<?php echo $section['id'];?>">
+                      <div class="input-group-append">
+                        <button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect create_lesson create_lesson_<?php echo $section['id'];?>" data-section-id="<?php echo $section['id'];?>">Create New Lesson</button>
                       </div>
                     </div>
                   </div>
-                <?php } ?>
-              <?php } ?>
-              <?php echo form_open_multipart('courses/create_lesson'); ?>
-              <div class="row pt-3">
-                <div class="col-md-6">
-                  <div class="input-group mb-3">
-                    <input type="hidden" class="form-control" name="section_ID" value="<?php echo $section['id'];?>">
-                    <input type="text" class="form-control" placeholder="Lesson Name" aria-label="Lesson Name" aria-describedby="button-addon2" name="lesson_title">
-                    <div class="input-group-append">
-                      <button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect">Add</button>
-                    </div>
-                  </div>
                 </div>
-              </div>
-              <?php echo form_close(); ?>
-            </div>
-          </div>
-        </div><!-- Accordion card -->    
-      <?php } ?>
-      </div>
-    </div><!--Grid column-->
-  </div><!--Grid row-->
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <?php echo form_open_multipart('courses/create_section'); ?>
-          <div class="input-group">
-            <input type="hidden" class="form-control" name="module_ID" value="<?php echo $module['id'];?>">
-            <input type="text" class="form-control" placeholder="Section" aria-label="Section"
-              aria-describedby="button-addon2" name="section_title" id="section_title">
-            <div class="input-group-append">
-              <button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect" id="submit_section">Add</button>
-            </div>
-          </div>
-          <?php echo form_close(); ?>
-        </div><!--Card-body-->
-      </div><!--Card-->
-    </div><!--Column-->
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-body">
-          <a type="button" class="btn btn-primary m-0 px-3 py-2 z-depth-0 waves-effect" data-toggle="modal" data-target="#create_lessons">Create Content Shortcut</a>
-        </div><!--Card-body-->
-      </div><!--Card-->
-    </div><!--Column-->
-  </div><!--Row-->
-</div><!--Container-->
+              </div><!-- Section Body -->  
+            </div><!-- Section Accordion card -->
+          <?php } ?>
+        </div><!-- Section Accordion -->  
+      </div><!--Grid column-->
+    </div><!--Grid row-->
+  </div><!--Container-->
 </main><!--Main laypassed out-->
+
 <!-- Are you sure -->
-<div data-backdrop="static" class="modal fade" id="create_lessons" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div data-backdrop="static" class="modal fade" id="create_content_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-notify modal-success modal-lg" role="document">
     <div class="modal-content">
@@ -150,39 +158,55 @@
         </button>
       </div>
       <div class="modal-body">
-        <?php echo form_open_multipart('courses/create_content'); ?>
-        <input type="hidden" class="form-control" name="module_ID" value="<?php echo $module['id'];?>">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-                <select class="browser-default custom-select select_section" name="select_section" id="select_section" required>
-                </select>
+        <label>* Content Title</label>
+        <input type="hidden" class="form-control" name="lesson_ID" id="lesson_ID">
+        <input type="text" class="form-control mb-4" name="content_title" id="content_title">
+        <div class="btn-group btn-group-sm mb-4" role="group" aria-label="Basic example">
+          <a class="btn btn-primary btn-sm add_video_button" id="add_video">Add Video</a>
+          <a class="btn btn-primary btn-sm add_article_button" id="add_article">Add Article/Details</a>
+          <a class="btn btn-primary btn-sm add_file_button" id="add_file">Add Downloadable File</a>
+        </div>
+        <div class="form-group add_video" hidden>
+          <label for="contentitle">Video URL (URLs from youtube and vimeo are allowed) <br><h6 class="red-text">NOTE: Select one file only.</h6></label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" aria-describedby="button-addon2" name="content_url" id="content_url">
+            <div class="input-group-append">
+              <a href="javascript:open_popup('<?php echo base_url('vendors/dialog.php?type=3&popup=1&amp;field_id=content_url'); ?>')" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect">Browse Media</a>
             </div>
-            <div class="form-group">
-              <select class="browser-default custom-select select_lesson" name="select_lesson" id="select_lesson" required>
-                <option selected disabled>Select Lesson</option>
-              </select>
-            </div> 
-          </div><!--Col-->
-        </div><!--Row-->
-        <div class="row">
-          <div class="col-md-12">
-            <div id="dynamic_content">
+          </div>
+          <label for="contentitle">Video Thumbnail (optional)<h6 class="red-text">NOTE: Select one file only.</h6></label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" aria-describedby="button-addon2" name="content_thumbnail" id="content_thumbnail">
+            <div class="input-group-append">
+              <a href="javascript:open_popup('<?php echo base_url('vendors/dialog.php?type=1&popup=1&amp;field_id=content_thumbnail'); ?>')" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect">Browse Media</a>
             </div>
-            <button class="btn btn-default waves-effect" id="add_another_content" type="button">Add Another Content</button>
-          </div><!--Col-->
+          </div>
+        </div>
+        <div class="form-group add_article" hidden>
+          <label>Details or Article</label>
+          <textarea type="textarea" class="content_written" name="content_written" id="content_written"></textarea>
+        </div>
+        <div class="form-group add_file" hidden>
+          <label for="image">Downloadble File</label>
+          <h6 class="red-text">NOTE: You can select multiple files</h6>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" aria-describedby="button-addon2" name="content_files" id="content_files">
+            <div class="input-group-append">
+              <a href="javascript:open_popup('<?php echo base_url('vendors/dialog.php?type=2&popup=1&amp;field_id=content_files'); ?>')" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect">Browse Media</a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer justify-content-center">
-        <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cancel</a>
-        <button class="btn btn-success waves-effect float-right" type="submit">Save Content</button>
+        <a type="button" class="btn btn-danger waves-effect cancel_create_content" id="cancel_create_content">Cancel</a>
+        <button class="btn btn-success waves-effect float-right" type="submit" id="create_content">Save Content</button>
       </div>
-      <?php echo form_close(); ?>
     </div><!--/.Content-->
   </div>
 </div>
+
 <!-- Section Edit -->
-<div data-backdrop="static" class="modal fade" id="sectionedit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div data-backdrop="static" class="modal fade" id="edit_section_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-sm modal-notify modal-info" role="document">
     <div class="modal-content">
@@ -205,38 +229,13 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-primary btn-sm" id="update_section">Save changes</button>
       </div>
     </div>
   </div>
 </div>
 <!-- Section Edit -->
-
-<!-- Section Delete -->
-<div data-backdrop="static" class="modal fade" id="delete_section_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title w-100" id="myModalLabel">Delete Section</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete this section?
-           lesson and content of this section will also be delete.</p>
-        <input type="hidden" class="form-control" name="delete_section_ID" id="delete_section_ID" >
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm" id="delete_section">Confirm</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Section Delete -->
 
 <!-- Lesson Edit -->
 <div data-backdrop="static" class="modal fade" id="edit_lesson_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -262,64 +261,13 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-primary btn-sm" id="update_lesson">Save changes</button>
       </div>
     </div>
   </div>
 </div>
 <!-- Lesson Edit -->
-
-<!-- Lesson Delete -->
-<div data-backdrop="static" class="modal fade" id="delete_lesson_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title w-100" id="myModalLabel">Delete Lesson</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete this lesson along with its content?</p>
-        <input type="hidden" class="form-control" name="delete_lesson_ID" id="delete_lesson_ID">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm" id="delete_lesson">Confirm</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Lesson Delete -->
-
-<!-- Add Content -->
-<div data-backdrop="static" class="modal fade" id="add_content_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-notify modal-success modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <p class="heading lead">Create Content</p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" class="white-text">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <?php echo form_open_multipart('courses/create_content'); ?>
-        <input type="hidden" class="form-control" name="select_lesson" id="selected_lesson">
-        <div id="dynamic_content_2">
-        </div>
-        <button class="btn btn-default waves-effect" id="add_another_content_2" type="button">Add Another Content</button>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cancel</a>
-        <button class="btn btn-success waves-effect float-right" type="submit">Save Content</button>
-      </div>
-      <?php echo form_close(); ?>
-    </div><
-  </div>
-</div>
-<!-- Add Content -->
 
 <!-- Content Edit -->
 <div data-backdrop="static" class="modal fade" id="edit_content_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -332,65 +280,64 @@
         </button>
       </div>      
       <div class="modal-body">
-      <?php echo form_open_multipart('courses/update_content'); ?>
         <div class="form-group">
           <label>* Content Title</label>
           <input type="hidden" class="form-control" name="edit_content_ID" id="edit_content_ID">
           <input type="text" class="form-control mb-4" name="edit_content_title" id="edit_content_title">
-          <label for="content_status">* Status</label>
+          <label for="edit_content_status">* Status</label>
           <div class="custom-control custom-switch mb-4">
-            <input type="checkbox" class="custom-control-input customSwitches" id="content_status" name="content_status">
-            <label class="custom-control-label switch_label" for="content_status"></label>
+            <input type="checkbox" class="custom-control-input customSwitches" id="edit_content_status" name="edit_content_status">
+            <label class="custom-control-label switch_label" for="edit_content_status"></label>
           </div>
-          <div class="form-group">
+          <div class="btn-group btn-group-sm mb-4" role="group" aria-label="Basic example">
+            <a class="btn btn-primary btn-sm add_video_button">Add Video</a>
+            <a class="btn btn-primary btn-sm add_article_button">Add Article/Details</a>
+            <a class="btn btn-primary btn-sm add_file_button">Add Downloadable File</a>
+          </div>
+          <div class="form-group add_video" hidden>
             <label for="contentitle">Video URL <h6 class="red-text">NOTE: URLs from youtube and vimeo are allowed</h6></label>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" name="edit_content_url" id="edit_content_url"
-                aria-describedby="button-addon2">
+              <input type="text" class="form-control" name="edit_content_url" id="edit_content_url" aria-describedby="button-addon2">
               <div class="input-group-append">
-                <button class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" data-toggle="modal" data-target="#file_manager">Browse Media</button>
+                <a href="javascript:open_popup('<?php echo base_url('vendors/dialog.php?type=3&popup=1&amp;field_id=edit_content_url'); ?>')" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect">Browse Media</a>
               </div>
             </div>
-          <label>Written content</label>
-          <textarea class="textarea summernote4" name="edit_content" id="edit_content" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" data-summernote-id="4"></textarea>
+            <label for="contentitle">Video Thumbnail (optional) <br><h6 class="red-text">NOTE: Select one file only.</h6></label>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" aria-describedby="button-addon2" name="edit_content_thumbnail" id="edit_content_thumbnail">
+              <div class="input-group-append">
+                <a href="javascript:open_popup('<?php echo base_url('vendors/dialog.php?type=1&popup=1&amp;field_id=edit_content_thumbnail'); ?>')" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect">Browse Media</a>
+              </div>
+            </div>
+          </div>
+          <div class="form-group add_article" hidden>
+            <label>Details or Article</label>
+            <textarea class="textarea" name="edit_content" id="edit_content"></textarea>
+          </div>
+          <div class="form-group add_file" hidden>
+            <label for="image">Add Downloadble Contents</label>
+            <h6 class="red-text">NOTE: You can select multiple files except folders</h6>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" aria-describedby="button-addon2" name="edit_content_files" id="edit_content_files">
+              <div class="input-group-append">
+                <a href="javascript:open_popup('<?php echo base_url('vendors/dialog.php?type=2&popup=1&amp;field_id=edit_content_files'); ?>')" class="btn btn-md btn-outline-primary m-0 px-3 py-2 z-depth-0 waves-effect">Browse Media</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary btn-sm" type="submit">Save changes</button>
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm" id="update_content">Save changes</button>
       </div>
-      <?php echo form_close(); ?>
     </div>
   </div>
 </div>
 <!-- Content Edit -->
 
-<!-- Content Delete -->
-<div data-backdrop="static" class="modal fade" id="contentdelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title w-100" id="myModalLabel">Delete Content</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete content?</p>
-        <input type="hidden" class="form-control" name="delete_content_ID" id="delete_content_ID">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-target="#contentdelete" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm" id="delete_content">Confirm</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Content Delete -->
-
 <!-- Copy Section -->
 <div data-backdrop="static" class="modal fade" id="copy_section_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-secondary" role="document">
+  <div class="modal-dialog modal-md modal-notify modal-secondary" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title w-100" id="myModalLabel">Copy Section To</h4>
@@ -399,22 +346,18 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <div class="col-md-12">
-            <input type="hidden" class="form-control" name="copy_section_ID" id="copy_section_ID">
-            <div class="form-group">
-              <select class="browser-default custom-select select_course" name="copy_course"></select>
-            </div>
-            <div class="form-group">
-              <select class="browser-default custom-select select_module" name="copy_section_to" id="copy_section_to">
-                <option selected disabled>Select Module</option>
-              </select>
-            </div>
-          </div><!--Col-->
-        </div><!--Row-->
+        <input type="hidden" class="form-control" name="copy_section_ID" id="copy_section_ID">
+        <div class="form-group">
+          <select class="browser-default custom-select select_course" name="copy_course"></select>
+        </div>
+        <div class="form-group">
+          <select class="browser-default custom-select select_module" name="copy_section_to" id="copy_section_to">
+            <option selected disabled>Select Module</option>
+          </select>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary btn-sm" id="copy_section">Copy</button>
       </div>
     </div>
@@ -433,7 +376,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="btn-group btn-group-sm justify-content-center" role="group" aria-label="Basic example">
+        <div class="btn-group btn-group-sm justify-content-center mb-4" role="group" aria-label="Basic example">
           <a class="btn btn-primary btn-sm copy_another_course">Copy to another course</a>
           <a class="btn btn-primary btn-sm copy_another_module">Copy to another Module</a>
         </div>
@@ -453,7 +396,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-success btn-sm" id="copy_lesson">Save</button>
       </div>
     </div>
@@ -463,7 +406,7 @@
 
 <!-- Copy Content -->
 <div data-backdrop="static" class="modal fade" id="copy_content_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-notify modal-secondary" role="document">
+  <div class="modal-dialog modal-md modal-notify modal-secondary" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title w-100" id="myModalLabel">Copy Content To</h4>
@@ -472,246 +415,45 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="row">
-          <div class="col-md-12">
-            <input type="hidden" class="form-control" name="copy_content_ID" id="copy_content_ID">
-            <div class="form-group">
-              <select class="browser-default custom-select select_course" name="copy_course"></select>
-            </div>
-            <div class="form-group">
-              <select class="browser-default custom-select select_module" name="copy_module">
-                <option selected disabled>Select Module</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <select class="browser-default custom-select select_section" name="copy_section">
-                 <option selected disabled>Select Section</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <select class="browser-default custom-select select_lesson" name="copy_content_to" id="copy_content_to">
-                <option selected disabled>Select Lesson</option>
-              </select>
-            </div> 
-          </div><!--Col-->
-        </div><!--Row-->
+        <div class="btn-group btn-group-sm justify-content-center" role="group" aria-label="Basic example">
+          <a class="btn btn-primary btn-sm copy_another_course">Copy to another course</a>
+          <a class="btn btn-primary btn-sm copy_another_module">Copy to another Module</a>
+        </div>
+        <input type="hidden" class="form-control" name="copy_content_ID" id="copy_content_ID">
+        <div class="form-group">
+          <select class="browser-default custom-select select_course" name="copy_course" hidden></select>
+        </div>
+        <div class="form-group">
+          <select class="browser-default custom-select select_module" name="copy_module" hidden>
+            <option selected disabled>Select Module</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="browser-default custom-select select_section" name="copy_section">
+             <option selected disabled>Select Section</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="browser-default custom-select select_lesson" name="copy_content_to" id="copy_content_to">
+            <option selected disabled>Select Lesson</option>
+          </select>
+        </div> 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary btn-sm" id="copy_content">Copy</button>
       </div>
     </div>
   </div>
 </div>
 <!-- Copy Content -->
-
-<!-- Central Modal Small -->
-<div class="modal fade" id="file_manager" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-fluid" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title w-100" id="myModalLabel">Media</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <iframe width="100%" height="550" frameborder="0" src="<?php echo base_url('vendors/dialog.php?type=3&field_id=edit_content_url'); ?>"></iframe>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Central Modal Small -->
 <script type="text/javascript">
 $(document).ready(function() {
-  $(".customSwitches").click(function() {
-    if($(".customSwitches").is(":checked")){
-      $('.switch_label').text('Active');
-      $(this).val(1);
-    } else {
-      $('.switch_label').text('Hidden');
-      $(this).val(0);
-    }
-  });
-});
-</script>
-<script>
-$(document).ready(function(){
-  var r=0;
-  $('#add_another_content_2').click(function(){
-    r++;
-    $('#dynamic_content_2').append('<div id="row_2'+r+'"><br><div class="form-group"><label for="content_title">* Title</label><input type="text" class="form-control" name="content_title[]""></div><div class="form-group"><label for="content_title">URL <h6 class="red-text">NOTE: Vimeo URL should start with https://vimeo... or //player...</h6></label><input type="text" class="form-control" name="content_url[]"></div><label>Content</label><textarea class="multipletextarea_2 multiple_2_'+r+'" name="content[]" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" data-multiple-2-summernote="'+r+'"></textarea><a type="button" name="remove" data-id="'+r+'" class="btn_remove btn btn-sm btn-danger float-right">DELETE</a></div>');
-    $(document).ready(function(){
-      $('.multipletextarea_2').each(function(){
-        var summernoteID = $(this).data('multiple-2-summernote');
-        $(this).summernote({
-          disableDragAndDrop: true,
-          height: "200px",
-          callbacks: {
-            onImageUpload: function(image) {
-              uploadImage2(image[0], summernoteID);
-            }
-          },
-          addclass: {
-            debug: true,
-            classTags: [{title:"Button","value":"btn btn-success"},{title:"Button","value":"btn btn-danger"}]
-          },
-          toolbar: [
-            ['style', ['style', 'addclass']],
-            ['font', ['bold', 'underline', 'clear', 'fontsize']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture']],
-            ['view', ['fullscreen', 'codeview', 'help']],
-          ],
-        });
-      });
-    });
-
-    function uploadImage2(image, summernoteID) {
-      var data = new FormData();
-      data.append("image", image);
-      $.ajax({
-        url: "<?=base_url()?>courses/upload_image",
-        cache: false,
-        contentType: false,
-        processData: false,
-        data: data,
-        type: "POST",
-        success: function(url) {
-          $('.multiple_2_'+summernoteID).summernote('insertImage', url);
-        },
-        error: function(data) {
-          console.log(data);
-        }
-      });
-    }
-  });
-  $(document).on('click', '.btn_remove', function(){
-    var button_id = $(this).data("id"); 
-    $('#row_2'+button_id+'').remove();
-    r--;
-  });
-});
-</script>
-<script>
-$(document).ready(function(){
-  var i=0;
-  $('#add_another_content').click(function(){
-    i++;
-    $('#dynamic_content').append('<div id="row'+i+'"><br><div class="form-group"><label for="content_title">* Content Title</label><input type="text" class="form-control" name="content_title[]"></div><div class="form-group"><label for="content_title">URL <h6 class="red-text">NOTE: Vimeo URL should start with https://vimeo... or //player...</h6></label><input type="text" class="form-control" name="content_url[]"></div><label>Content</label><textarea class="multipletextarea multiple_'+i+'" name="content[]" placeholder="Place some text here" style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" data-multiple-summernote="'+i+'"></textarea><a type="button" name="remove" data-id="'+i+'" class="btn_remove btn btn-sm btn-danger float-right">DELETE</a></div>');
-      $('.multipletextarea').each(function(){
-        var summernoteID = $(this).data('multiple-summernote');
-        $(this).summernote({
-          disableDragAndDrop: true,
-          
-          height: "200px",
-          callbacks: {
-            onImageUpload: function(image) {
-              uploadImage2(image[0], summernoteID);
-            }
-          },
-          addclass: {
-            debug: true,
-            classTags: [{title:"Button","value":"btn btn-success"},{title:"Button","value":"btn btn-danger"}]
-          },
-          toolbar: [
-            ['style', ['style', 'addclass']],
-            ['font', ['bold', 'underline', 'clear', 'fontsize']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture']],
-            ['view', ['fullscreen', 'codeview', 'help']],
-          ],
-        });
-      });
-
-    function uploadImage2(image, summernoteID) {
-      var data = new FormData();
-      data.append("image", image);
-      $.ajax({
-        url: "<?=base_url()?>courses/upload_image",
-        cache: false,
-        contentType: false,
-        processData: false,
-        data: data,
-        type: "POST",
-        success: function(url) {
-          $('.multiple_'+summernoteID).summernote('insertImage', url);
-        },
-        error: function(data) {
-          console.log(data);
-        }
-      });
-    }
-  });
-
-  $(document).on('click', '.btn_remove', function(){
-    var button_id = $(this).data("id"); 
-    $('#row'+button_id+'').remove();
-    i--;
-  });
-
-  $(document).ready(function(){
-    $('.textarea').each(function(){
-      var summernoteID = $(this).data('summernote-id');
-      $(this).summernote({
-        disableDragAndDrop: true,
-        height: "300px",
-        callbacks: {
-          onImageUpload: function(image) {
-           uploadImage(image[0], summernoteID);
-          }
-        },
-        addclass: {
-        debug: true,
-        classTags: [{title:"Button","value":"btn btn-success"},{title:"Button","value":"btn btn-danger"}]
-      },
-      toolbar: [
-        ['style', ['style', 'addclass']],
-        ['font', ['bold', 'underline', 'clear', 'fontsize']],
-        ['fontname', ['fontname']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['table', ['table']],
-        ['insert', ['link', 'picture']],
-        ['view', ['fullscreen', 'codeview', 'help']],
-      ],
-      });
-    });
-  });
-  function uploadImage(image, summernoteID) {
-    var data = new FormData();
-    data.append("image", image);
-    $.ajax({
-      url: "<?=base_url()?>courses/upload_image",
-      cache: false,
-      contentType: false,
-      processData: false,
-      data: data,
-      type: "POST",
-      success: function(url) {
-        $('.summernote'+summernoteID).summernote('insertImage', url);
-      },
-      error: function(data) {
-        console.log(data);
-      }
-    });
-  }
-});
-</script>
-<script type="text/javascript">
-$(document).ready(function() {
-  $( "#accordionEx78" ).sortable({
+  $("#section_accordion").sortable({
   placeholder : "ui-state-highlight",
     update  : function(event, ui){
       var sec_order_id = new Array();
-      $('#accordionEx78 .sortsection').each(function(){
+      $('#section_accordion .sortsection').each(function(){
         sec_order_id.push($(this).data("section-id"));
       });
       $.ajax({
@@ -727,11 +469,11 @@ $(document).ready(function() {
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
-  $( ".sortablelessons" ).sortable({
+  $(".lessons").sortable({
     placeholder : "ui-state-highlight",
     update  : function(event, ui){
       var les_order_id = new Array();
-      $('.sortablelessons .sortlessons').each(function(){
+      $('.lessons .lesson_accordion').each(function(){
         les_order_id.push($(this).data("lesson-id"));
       });
       $.ajax({
@@ -739,13 +481,6 @@ $(document).ready(function() {
         method:"POST",
         data:{les_order_id:les_order_id},
         success:function(data){
-          if(data){
-            $(".alert-danger").hide();
-            $(".alert-success ").show();
-          } else {
-            $(".alert-success").hide();
-            $(".alert-danger").show();
-          }
         }
       });
     }
@@ -754,11 +489,11 @@ $(document).ready(function() {
 </script>
 <script type="text/javascript">
 $(document).ready(function() {
-  $( ".sortablecontent" ).sortable({
+  $(".contents").sortable({
     placeholder : "ui-state-highlight",
     update  : function(event, ui){
       var con_order_id = new Array();
-      $('.sortablecontent .sortcontent').each(function(){
+      $('.contents .content_accordion').each(function(){
         con_order_id.push($(this).data("content-id"));
       });
       $.ajax({
@@ -772,13 +507,54 @@ $(document).ready(function() {
   });
 });
 </script>
+<script>
+CKEDITOR.replace('content_written' ,{
+  filebrowserBrowseUrl : '<?php echo base_url('vendors/dialog.php?type=2&editor=ckeditor&fldr='); ?>',
+  filebrowserUploadUrl : '<?php echo base_url('vendors/dialog.php?type=2&editor=ckeditor&fldr='); ?>',
+  filebrowserImageBrowseUrl : '<?php echo base_url('vendors/dialog.php?type=1&editor=ckeditor&fldr='); ?>'
+});
+</script>
+<script>
+CKEDITOR.replace('edit_content' ,{
+  filebrowserBrowseUrl : '<?php echo base_url('vendors/dialog.php?type=2&editor=ckeditor&fldr='); ?>',
+  filebrowserUploadUrl : '<?php echo base_url('vendors/dialog.php?type=2&editor=ckeditor&fldr='); ?>',
+  filebrowserImageBrowseUrl : '<?php echo base_url('vendors/dialog.php?type=1&editor=ckeditor&fldr='); ?>'
+});
+</script>
 <script type="text/javascript">
-$(document).ready(function(){
+$(document).ready(function() {
   var course_slug = '<?php echo $course['slug'];?>';
   var module_ID = '<?php echo $module['id'];?>';
 
   get_course();
   get_modules(module_ID);
+
+  $(".status_switch").click(function() {
+    var id=$(this).data('id');
+    if(confirm("Are you sure you want to change status of this Module?")){
+      if($(this).is(":checked")){
+        $('.status_switch_label').removeClass("badge-warning").addClass("badge-success").text('Active');
+        $(this).val(1);
+        change_status(id, '1');
+      } else {
+        $('.status_switch_label').removeClass("badge-success").addClass("badge-warning").text('Hidden');
+        $(this).val(0);
+        change_status(id, '0');
+      }
+    }
+  });
+
+  function change_status(module_ID, status){
+    $.ajax({
+      type : "POST",
+      url  : "<?=base_url()?>courses/hide_all_module",
+      dataType : "JSON",
+      data : {module_ID:module_ID, status:status},
+      success: function(data){
+        location.reload();
+      }
+    });
+  }
 
   function get_course(){
     $.ajax({
@@ -867,76 +643,130 @@ $(document).ready(function(){
   $('.select_section').change(function(){ 
     var section_ID=$(this).val();
     get_lessons(section_ID);
-  }); 
-
-  //Get Section to delete
-  $(document).on("click", ".delete_section", function() { 
-    var id=$(this).data('id');
-    $('#delete_section_modal').modal('show');
-    $('[name="delete_section_ID"]').val(id);
   });
 
-  $("#delete_section").click(function(){
-    var section_ID = $('#delete_section_ID').val();
+  $(".customSwitches").click(function() {
+    if($(".customSwitches").is(":checked")){
+      $('.switch_label').text('Active');
+      $(this).val(1);
+    } else {
+      $('.switch_label').text('Hidden');
+      $(this).val(0);
+    }
+  });
+
+  $('#create_section').on('click',function(){
+    var module_ID = $('#module_ID').val();
+    var title = $('#create_section_title').val();
     $.ajax({
       type : "POST",
-      url  : "<?=base_url()?>courses/delete_section",
+      url  : "<?=base_url()?>courses/create_section",
       dataType : "JSON",
-      data : {section_ID:section_ID},
+      data : {module_ID:module_ID, title:title},
       success: function(data){
-        $('#delete_section_modal').modal('hide');
-        toastr.error('Section Deleted');
-        location.reload();
+        if(data.error){
+          toastr.error(data.message);
+          error_sound.play();
+        } else {
+          toastr.success('Section created!');
+          var html = '<div data-section-id="'+data.section_ID+'" class="card sortsection section_'+data.section_ID+'">';
+          html += '<div class="card-header d-flex justify-content-between" role="tab" id="mainsection_'+data.section_ID+'"><a data-toggle="collapse" data-parent="#section_accordion" href="#section_'+data.section_ID+'" aria-expanded="true" aria-controls="section_'+data.section_ID+'"><h3 class="mt-1 mb-0"><span style="cursor: all-scroll;" id="section_title_'+data.section_ID+'">'+title+'</span> <i class="fas fa-angle-down rotate-icon"></i></h3></a><div><span class="section_status_'+data.section_ID+' badge badge-pill mr-2 badge-info">Active</span><div class="btn-group btn-group-sm" role="group" aria-label="Basic example"><a type="button" class="btn btn-primary btn-sm edit_section" data-id="'+data.section_ID+'"><i class="fas fa-pencil-alt"></i></a><button type="button" class="btn btn-danger btn-sm delete_section" data-id="'+data.section_ID+'"><i class="fas fa-trash-alt"></i></button><a type="button" class="btn btn-secondary btn-sm copy_section" data-id="'+data.section_ID+'"><i class="fas fa-copy"></i></a></div></div></div><div id="section_'+data.section_ID+'" class="collapse show" role="tabpanel" aria-labelledby="mainsection_'+data.section_ID+'" data-parent="#section_accordion"><div class="lessons_'+data.section_ID+'"></div><div class="row m-3"><div class="col-md-4"><div class="input-group mb-3"><input type="text" class="form-control" placeholder="Lesson Title" aria-label="Lesson Title" aria-describedby="button-addon2" id="lesson_title_'+data.section_ID+'"><div class="input-group-append"><button class="btn btn-md btn-success m-0 px-3 py-2 z-depth-0 waves-effect create_lesson" data-section-id="'+data.section_ID+'">Create New Lesson</button></div></div></div></div></div></div>';
+          $(".sections:last").append(html);
+          $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+        }
+        $('#create_section_title').val('');
       }
     });
-    return false;
   });
 
-  //Get Lesson to delete
-  $(document).on("click", ".delete_lesson", function() { 
-    var id=$(this).data('id');
-    $('#delete_lesson_modal').modal('show');
-    $('[name="delete_lesson_ID"]').val(id);
-   });
+  $(".create_lesson_input").keydown(function(e) {
+    var section_ID = $(this).data('section-id');
+    var title = $('#lesson_title_'+section_ID).val();
+    if (e.which == 9 || e.which == 13) {
+      var index = $(".create_lesson_input").index(this);
+      $(".create_lesson_input").eq(index + 1).focus();
+      e.preventDefault();
+      submit_lesson(section_ID, title);
+    }
+  });
 
-  //delete lesson
-  $('#delete_lesson').on('click',function(){
-    var lesson_ID = $('#delete_lesson_ID').val();
+  $(document).on("click", ".create_lesson", function() { 
+    var section_ID = $(this).data('section-id');
+    var title = $('#lesson_title_'+section_ID).val();
+    submit_lesson(section_ID, title);
+  });
+
+  function submit_lesson(section_ID, title){
     $.ajax({
       type : "POST",
-      url  : "<?=base_url()?>courses/delete_lesson",
+      url  : "<?=base_url()?>courses/create_lesson",
       dataType : "JSON",
-      data : {lesson_ID:lesson_ID},
+      data : {section_ID:section_ID, title:title},
       success: function(data){
-        toastr.error('Lesson Deleted');
-        location.reload();
+        if(data.error){
+          toastr.error(data.message);
+          error_sound.play();
+        } else {
+          toastr.success('Lesson created!');
+          create_lesson(data.lesson_ID, section_ID, title);
+        }
+        $('#lesson_title_'+section_ID).val('');
       }
     });
-    return false;
+  }
+
+  function create_lesson(lesson_ID, section_ID, title){
+    var html = '<div class="accordion md-accordion lesson_accordion pt-2 pl-4 ml-4" id="mainlesson_'+lesson_ID+'" role="tablist" aria-multiselectable="true" data-lesson-id="'+lesson_ID+'"><div class="d-flex"><a data-toggle="collapse" data-parent="#mainlesson_'+lesson_ID+'" href="#lesson_'+lesson_ID+'" aria-expanded="true" aria-controls="lesson_'+lesson_ID+'"><h4><span style="cursor: all-scroll;" id="lesson_title_'+lesson_ID+'">'+title+'</span><i class="fas fa-angle-down rotate-icon ml-2"></i></h4></a><div class="ml-4"><span class="lesson_status_'+lesson_ID+' badge badge-pill mr-2 badge-info">Active</span><a class="edit_lesson" data-id="'+lesson_ID+'"><i class="fas fa-pencil-alt blue-text"></i></a><a class="delete_lesson" data-id="'+lesson_ID+'"><i class="fas fa-trash-alt red-text ml-1"></i></a><a class="copy_lesson" data-id="'+lesson_ID+'"><i class="fas fa-copy text-secondary ml-1"></i></a><a class="add_content green-text ml-1" data-lesson-id="'+lesson_ID+'"><i class="fas fa-plus ml-1"></i> Add Content</a></div></div><div id="lesson_'+lesson_ID+'" class="collapse show contents_'+lesson_ID+'" role="tabpanel" aria-labelledby="mainsection_'+section_ID+'" data-parent="#mainlesson_'+lesson_ID+'"></div></div>';
+    $(".lessons_"+section_ID).last().append(html);
+  }
+
+  $(document).on('click','.add_content',function() {
+    var id = $(this).data('lesson-id');
+    $('#create_content_modal').modal('show');
+    $('#lesson_ID').val(id);
   });
 
-  //Get Content to delete
-  $(document).on("click", ".delete_content", function() { 
-    var id=$(this).data('id');
-    $('#contentdelete').modal('show');
-    $('[name="delete_content_ID"]').val(id);
-  });
-
-  $("#delete_content").click(function(){
-    var content_ID = $('#delete_content_ID').val();
+  $('#create_content').on('click',function(){
+    var lesson_ID = $('#lesson_ID').val();
+    var title = $('#content_title').val();
+    var url = $('#content_url').val();
+    var files = $('#content_files').val();
+    var content = CKEDITOR.instances['content_written'].getData();
+    var thumbnail = $('#content_thumbnail').val();
     $.ajax({
       type : "POST",
-      url  : "<?=base_url()?>courses/delete_content",
+      url  : "<?=base_url()?>courses/create_content",
       dataType : "JSON",
-      data : {content_ID:content_ID},
+      data : {lesson_ID:lesson_ID, title:title, url:url, content:content, files:files, thumbnail:thumbnail},
       success: function(data){
-        toastr.error('Content Deleted');
-        location.reload();
+        if(data.error){
+          toastr.error(data.message);
+          error_sound.play();
+        } else {
+          toastr.success('Content created!');
+          $('#create_content_modal').modal('hide');
+          create_content(data.content_ID, lesson_ID, title);
+          $('#lesson_ID').val('');
+          $('#content_title').val('');
+          $('#content_url').val('');
+          $('#content_files').val('');
+          $('#content_written').val('');
+          $('#content_thumbnail').val('');
+          $('.add_video').prop( "hidden", true );
+          $('.add_article').prop( "hidden", true );
+          $('.add_file').prop( "hidden", true );
+          CKEDITOR.instances['content_written'].setData('');
+        }
       }
     });
-    return false;
   });
 
+  function create_content(content_ID, lesson_ID, title){
+    var html = '<div class="row ml-4 pl-4 content_'+content_ID+' content_accordion" data-content-id="'+content_ID+'">';
+    html += '<ul class="list-group align-middle" role="tablist"><li style="cursor: all-scroll;"><h5 id="content_title_'+content_ID+'">'+title+'</h5></li></ul><div class="col-4 float-right"><span class="content_status_'+content_ID+' badge badge-pill mr-2 badge-info">Active</span><a class="edit_content" data-id="'+content_ID+'"><i class="fas fa-pencil-alt blue-text"></i></a><a class="delete_content" data-id="'+content_ID+'"><i class="fas fa-trash-alt red-text ml-1"></i></a><a class="copy_content" data-id="'+content_ID+'"><i class="fas fa-copy text-secondary ml-1"></i></a></div></div>';
+    $(".contents_"+lesson_ID).last().append(html);
+  }
+  
   //Get Section to update
   $(document).on('click','.edit_section',function(e) {
     var section_ID=$(this).data('id');
@@ -946,7 +776,7 @@ $(document).ready(function(){
       dataType : "JSON",
       data : {section_ID:section_ID},
       success: function(data){
-        $('#sectionedit').modal('show');
+        $('#edit_section_modal').modal('show');
         $('[name="edit_section_title"]').val(data.title);
         $('[name="edit_section_ID"]').val(section_ID);
         $('#section_status').val(data.status);
@@ -957,10 +787,8 @@ $(document).ready(function(){
         }
       }
     });
-    return false;
   });
 
-  //Update Section
   $('#update_section').on('click',function(){
     var title=$('[name="edit_section_title"]').val();
     var id=$('[name="edit_section_ID"]').val();
@@ -973,20 +801,24 @@ $(document).ready(function(){
       success: function(data){
       if(data.error){
           toastr.error(data.message);
+          error_sound.play();
         } else {
-          toastr.success('Section title updated.');
+          toastr.success('Section updated!');
           $('[name="edit_section_title"]').val("");
           $('[name="edit_section_ID"]').val("");
           $('[id="section_status"]').val("");
-          $('#sectionedit').modal('hide');
-          location.reload();
+          if(status == 1){
+            $('.section_status_'+id).removeClass("badge-warning").addClass("badge-info").text('Active');
+          } else {
+            $('.section_status_'+id).removeClass("badge-info").addClass("badge-warning").text('Hidden');
+          }
+          $('#edit_section_modal').modal('hide');
+          $('#section_title_'+id).text(title);
         }
       }
     });
-    return false;
   });
 
-  //Get Lesson to update
   $(document).on('click','.edit_lesson',function() {
     var lesson_ID = $(this).data('id');
     $.ajax({
@@ -1006,10 +838,8 @@ $(document).ready(function(){
         }
       }
     });
-    return false;
   });
 
-  //update lesson
   $('#update_lesson').on('click',function(){
     var title = $('#edit_lesson_title').val();
     var id = $('#edit_lesson_ID').val();
@@ -1018,31 +848,28 @@ $(document).ready(function(){
       type : "POST",
       url  : "<?=base_url()?>courses/update_lesson",
       dataType : "JSON",
-      data : {lesson_ID:id , lesson_title:title, status:status},
+      data : {lesson_ID:id, lesson_title:title, status:status},
       success: function(data){
         if(data.error){
           toastr.error(data.message);
+          error_sound.play();
         } else {
           toastr.success('Lesson title updated.');
           $('[name="edit_lesson_title"]').val("");
           $('[name="edit_lesson_ID"]').val("");
           $('[name="lesson_status"]').val("");
+          if(status == 1){
+            $('.lesson_status_'+id).removeClass("badge-warning").addClass("badge-info").text('Active');
+          } else {
+            $('.lesson_status_'+id).removeClass("badge-info").addClass("badge-warning").text('Hidden');
+          }
           $('#edit_lesson_modal').modal('hide');
-          location.reload();
+          $('#lesson_title_'+id).text(title);
         }
       }
     });
-    return false;
   });
 
-  //Get lesson for adding content
-  $(document).on('click','.add_content',function() {
-    var id = $(this).data('lesson-id');
-    $('#add_content_modal').modal('show');
-    $('#selected_lesson').val(id);
-  });
-
-  //Get content to update
   $(document).on('click','.edit_content',function() {
     var content_ID=$(this).data('id');
     $.ajax({
@@ -1052,19 +879,134 @@ $(document).ready(function(){
       data : {content_ID:content_ID},
       success: function(data){
         $('#edit_content_modal').modal('show');
+        var html = '';
+        if(data.url == ""){
+          $('.add_video').prop("hidden", true);
+          $(".add_video_button").removeClass("btn-danger").addClass("btn-primary").text('Add Video');
+        } else {
+          $('.add_video').prop("hidden", false);
+          $(".add_video_button").removeClass("btn-primary").addClass("btn-danger").text('Remove Video');
+        }
+
+        if(data.content == ""){
+          $('.add_article').prop("hidden", true);
+          $(".add_article_button").removeClass("btn-danger").addClass("btn-primary").text('Add Article/Details');
+        } else {
+          $('.add_article').prop("hidden", false);
+          $(".add_article_button").removeClass("btn-primary").addClass("btn-danger").text('Remove Article/Details');
+        }
+
+        if(data.file == ""){
+          $('.add_file').prop("hidden", true);
+          $(".add_file_button").removeClass("btn-danger").addClass("btn-primary").text('Add Downloadable File');
+        } else {
+          $('.add_file').prop("hidden", false);
+          $(".add_file_button").removeClass("btn-primary").addClass("btn-danger").text('Remove Downloadable File');
+        }
+
+        $('[name="edit_content_ID"]').val(content_ID);
         $('[name="edit_content_title"]').val(data.title);
         $('[name="edit_content_url"]').val(data.url);
-        $('#edit_content').summernote('code', data.content);
-        $('[name="edit_content_ID"]').val(content_ID);
-        $('[name="content_status"]').val(data.status);
+        $('[name="edit_content_thumbnail"]').val(data.thumbnail);
+        CKEDITOR.instances['edit_content'].setData(data.content);
+        $('[name="edit_content_status"]').val(data.status);
+        $('[name="edit_content_files"]').val(data.file);
         $('.switch_label').text('Hidden');
         if(data.status == 1){
-          $('#content_status').attr("checked", "checked");
+          $('#edit_content_status').attr("checked", "checked");
           $('.switch_label').text('Active');
         }
       }
     });
-    return false;
+  });
+
+  $('#update_content').on('click',function(){
+      var id = $('#edit_content_ID').val();
+      var title = $('#edit_content_title').val();
+      var url = $('#edit_content_url').val();
+      var content = CKEDITOR.instances['edit_content'].getData();
+      var thumbnail = $('#edit_content_thumbnail').val();
+      var files = $('#edit_content_files').val();
+      var status = $('#edit_content_status').val();
+      $.ajax({
+        type : "POST",
+        url  : "<?=base_url()?>courses/update_content",
+        dataType : "JSON",
+        data : {content_ID:id, title:title, url:url, content:content, files:files, thumbnail:thumbnail, status:status},
+        success: function(data){
+          if(data.error){
+            toastr.error(data.message);
+            error_sound.play();
+          } else {
+            toastr.success('Content updated!');
+            $('[name="edit_content_ID"]').val("");
+            $('[name="edit_content_title"]').val("");
+            CKEDITOR.instances['edit_content'].setData(data.content);
+            $('[name="edit_content_thumbnail"]').val("");
+            $('[name="edit_content_files"]').val("");
+            $('[name="edit_content_url"]').val("");
+            $('#edit_content_modal').modal('hide');
+            $('[name="edit_content_status"]').val(data.status);
+            if(status == 1){
+              $('.content_status_'+id).removeClass("badge-warning").addClass("badge-info").text('Active');
+            } else {
+              $('.content_status_'+id).removeClass("badge-info").addClass("badge-warning").text('Hidden');
+            }
+            $('#content_title_'+id).text(title);
+          }
+        }
+      });
+  });
+
+  $(document).on("click", ".delete_section", function() { 
+    var id=$(this).data('id');
+    alert_sound.play();
+    if(confirm("Are you sure you want to delete this section along with its lessons and contents?")){
+      $.ajax({
+        type : "POST",
+        url  : "<?=base_url()?>courses/delete_section",
+        dataType : "JSON",
+        data : {section_ID:id},
+        success: function(data){
+          toastr.error('Section Deleted!');
+          $(".section_"+id).empty();
+        }
+      });
+    }
+  });
+
+  $(document).on("click", ".delete_lesson", function() { 
+    var id=$(this).data('id');
+    alert_sound.play();
+    if(confirm("Are you sure you want to delete this lesson along with its contents?")){
+      $.ajax({
+        type : "POST",
+        url  : "<?=base_url()?>courses/delete_lesson",
+        dataType : "JSON",
+        data : {lesson_ID:id},
+        success: function(data){
+          toastr.error('Lesson Deleted!');
+          $("#mainlesson_"+id).empty();
+        }
+      });
+    }
+  });
+
+  $(document).on("click", ".delete_content", function() { 
+    var id=$(this).data('id');
+    alert_sound.play();
+    if(confirm("Are you sure you want to delete this content?")){
+      $.ajax({
+        type : "POST",
+        url  : "<?=base_url()?>courses/delete_content",
+        dataType : "JSON",
+        data : {content_ID:id},
+        success: function(data){
+          toastr.error('Content Deleted!');
+          $(".content_"+id).empty();
+        }
+      });
+    }
   });
 
   //Get lesson for adding content
@@ -1092,8 +1034,9 @@ $(document).ready(function(){
       dataType : "JSON",
       data : {module_ID:module_ID, section_ID:section_ID},
       success: function(data){
-        if(data == false){
+        if(data.error){
           toastr.error('Section title already exist!');
+          error_sound.play();
         } else {
           toastr.success('Section copied successfully!');
         }
@@ -1112,6 +1055,8 @@ $(document).ready(function(){
     get_sections(module_ID);
     $('[name="copy_lesson_ID"]').val(lesson_ID);
     $('[name="copy_lesson_to"]').val();
+    $('.select_module').prop("hidden", true); 
+    $('.select_course').prop("hidden", true); 
   });
 
   $('#copy_lesson').on('click',function(){
@@ -1123,12 +1068,14 @@ $(document).ready(function(){
       dataType : "JSON",
       data : {section_ID:section_ID, lesson_ID:lesson_ID},
       success: function(data){
-        if(data == false){
+        if(data.error){
           toastr.error('Lesson title already exist!');
+          error_sound.play();
         } else {
           toastr.success('Lesson copied successfully!');
           $('.select_module').attr('hidden');
           $('.select_course').attr('hidden');
+          create_lesson(data.lesson_ID, data.section_ID, data.title);
         }
         $('#copy_lesson_modal').modal('hide');
       }
@@ -1145,6 +1092,8 @@ $(document).ready(function(){
     get_lessons(section_ID);
     $('[name="copy_content_ID"]').val(content_ID);
     $('[name="copy_content_to"]').val();
+    $('.select_module').prop( "hidden", true ); 
+    $('.select_course').prop( "hidden", true ); 
   });
 
   $('#copy_content').on('click',function(){
@@ -1156,23 +1105,89 @@ $(document).ready(function(){
       dataType : "JSON",
       data : {lesson_ID:lesson_ID, content_ID:content_ID},
       success: function(data){
-        if(data == false){
+        if(data.error){
           toastr.error('Content title already exist!');
+          error_sound.play();
         } else {
           toastr.success('Content copied successfully!');
+          create_content(data.content_ID, data.lesson_ID, data.title);
         }
         $('#copy_content_modal').modal('hide');
       }
     });
   });
 
-  //Copy copy
   $(document).on('click','.copy_another_module',function() {
     $('.select_module').removeAttr('hidden');
   });
 
   $(document).on('click','.copy_another_course',function() {
     $('.select_course').removeAttr('hidden');
+  });
+
+  var x = true;
+  $(document).on('click','.add_video_button', function() {
+    if(x){
+      $('.add_video').removeAttr('hidden');
+      $(this).removeClass("btn-primary").addClass("btn-danger").text('Remove Video');
+      x = false;
+    } else {
+      $('.add_video').prop( "hidden", true );
+      $(this).removeClass("btn-danger").addClass("btn-primary").text('Add Video');
+      $('[name="edit_content_thumbnail"]').val("");
+      $('[name="edit_content_url"]').val("");
+      $('#content_thumbnail').val('');
+      $('#content_url').val('');
+      x = true;
+    }
+  });
+
+  var y = true;
+  $(document).on('click', '.add_article_button', function() {
+    if(y){
+      $('.add_article').removeAttr('hidden');
+      $(this).removeClass("btn-primary").addClass("btn-danger").text('Remove Article/Details');
+      y = false;
+    } else {
+      $('.add_article').prop( "hidden", true );
+      $(this).removeClass("btn-danger").addClass("btn-primary").text('Add Article/Details');
+      CKEDITOR.instances['edit_content'].setData("");
+      CKEDITOR.instances['content_written'].setData("");
+      y = true;
+    }
+  });
+
+  var z = true;
+  $(document).on('click', '.add_file_button', function() {
+    if(z){
+      $('.add_file').removeAttr('hidden');
+      $(this).removeClass("btn-primary").addClass("btn-danger").text('Remove Downloadble File');
+      z = false;
+    } else {
+      $('.add_file').prop( "hidden", true );
+      $(this).removeClass("btn-danger").addClass("btn-primary").text('Add Downloadble File');
+      $('[name="edit_content_files"]').val("");
+      $('#content_files').val('');
+      z = true;
+    }
+  });
+
+  $(document).on('click', '.cancel_create_content', function() {
+    $('#create_content_modal').modal('hide');
+    $('.add_video').prop("hidden", true);
+    $('.add_article').prop("hidden", true);
+    $('.add_file').prop("hidden", true);
+    $('.add_video_button').removeClass("btn-danger").addClass("btn-primary").text('Add Article/Details');
+    $('.add_article_button').removeClass("btn-danger").addClass("btn-primary").text('Add Video');
+    $('.add_file_button').removeClass("btn-danger").addClass("btn-primary").text('Add Downloadble File');
+  });
+
+  $('#create_content_modal').on('shown.bs.modal', function() {
+    $(document).off('focusin.modal');
+  });
+
+  $('#edit_content_modal').on('shown.bs.modal', function() {
+    $(document).off('focusin.modal');
   });
 
 });

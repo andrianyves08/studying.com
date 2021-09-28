@@ -78,7 +78,6 @@
               <tr>
                 <th scope="col">Title</th>
                 <th scope="col">Status</th>
-                <th scope="col">Price</th>
                 <th scope="col">Date Enrolled</th>
                 <th scope="col"></th>
               </tr>
@@ -88,7 +87,6 @@
               <tr>
                 <td><a href="<?php base_url(); ?>course/<?php echo $row['slug']; ?>" class="blue-text"><?php echo ucwords($row['title']);?></a></td>
                 <td><?php echo ucwords($row['purchase_status_name']);?></td>
-                <td><?php echo '$ '.$row['price'];?></td>
                 <td><?php echo date("F d, Y", strtotime($row['date_enrolled']));?></td>
                 <td><a class="btn btn-primary btn-sm purchase_history" data-purchase-id="<?php echo $row['purchase_ID']; ?>">View Purchase History</a></td>
               </tr>
@@ -385,6 +383,7 @@
         <?php echo form_open_multipart('users/update_profile'); ?>
         <div class="form-group">
           <label for="formGroupExampleInput">Username</label>
+          <input type="hidden" class="form-control" name="current_username" value="<?php echo $my_info['username'];?>">
           <input type="text" class="form-control" name="username" value="<?php echo $my_info['username'];?>">
         </div>
         <div class="form-row mb-4">

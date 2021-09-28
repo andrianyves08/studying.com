@@ -1,5 +1,5 @@
 <style type="text/css">
-  .files .uploadTrigger {
+.files input {
     outline: 2px dashed #92b0b3;
     outline-offset: -10px;
     -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
@@ -9,7 +9,7 @@
     margin: 0;
     width: 100% !important;
 }
-.files .uploadTrigger:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
+.files input:focus{     outline: 2px dashed #92b0b3;  outline-offset: -10px;
     -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
     transition: outline-offset .15s ease-in-out, background-color .15s linear; border:1px solid #92b0b3;
  }
@@ -28,7 +28,7 @@
     background-size: 100%;
     background-repeat: no-repeat;
 }
-
+.color input{ background-color:#f1f1f1;}
 .files:before {
     position: absolute;
     bottom: 10px;
@@ -49,6 +49,8 @@
     $CI =& get_instance();
     $CI->load->model('post_model');
     $CI->load->model('instructor_model');
+    $CI->load->model('course_model');
+
 
 ?>
 <main class="pt-5">
@@ -110,36 +112,15 @@
                 <h4><strong>Mastermind Call Schedule</strong></h4>
             <?php } ?>
           
-            <?php foreach ($schedules as $schedule) {
+            <?php $i=0; foreach ($schedules as $schedule) {
               echo '<h5>';
-              switch ($schedule['day']) {
-                case 1:
-                  echo 'Monday';
-                  break;
-                case 2:
-                  echo 'Tuesday';
-                  break;
-                case 3:
-                  echo 'Wednesday';
-                  break;
-                case 4:
-                  echo 'Thursday';
-                  break;
-                case 5:
-                  echo 'Friday';
-                  break;
-                case 6:
-                  echo 'Saturday';
-                  break;
-                default:
-                  echo 'Sunday';
-              } 
 
-              $datetime = new DateTime($schedule['time'], new DateTimeZone($schedule['timezone']));
+              $day = $schedule['day'].' '.$schedule['time'];
+              $datetime = new DateTime($day, new DateTimeZone($schedule['timezone']));
               $datetime->setTimeZone(new DateTimeZone($timezone));
-              $triggerOn = $datetime->format('h:i A');
-              echo ' '.$triggerOn.' GMT'.' '.$schedule['timezone'].'<h5>';
-            } ?>
+              $triggerOn = $datetime->format('D h:i A');
+              echo ' <span class="time_'.$i.'">'.$triggerOn.'</span> '.$schedule['note'].'<h5>';
+             $i++; } ?>
             <?php } } ?>
             <div class="card mb-4 mt-4">
             <div class="card-header customcolorbg text-white h6">
@@ -190,14 +171,13 @@
             <?php echo form_close(); ?>
           <?php } ?>
           <div id="timeline" data-course-id="0">
-          <?php 
-
+          <?php
           foreach ($posts as $post) {
             $images = $CI->post_model->get_post_files($post['post_ID']);
             $comments = $CI->post_model->get_comments(2, 0, $post['post_ID']);
             $total_likes = $CI->post_model->total_likes($post['post_ID']);
             $total_comments = $CI->post_model->total_comments($post['post_ID']);
-            $courses = $CI->post_model->get_post_to_course($post['post_ID']);
+            $course = $CI->course_model->get_course(NULL, NULL, 0, '1', $post['course_ID']);
           ?>
           <div class="card mb-4 posts post_id_<?php echo $post['post_ID']; ?>">
             <div class="media mt-2">
@@ -205,8 +185,12 @@
               <div class="media-body">
                  <h5><a class="text-dark profile_popover" href="<?php echo base_url().''.$post['username']; ?>" data-user-id="<?php echo $post['user_ID'];?>"><?php echo ucwords($post['first_name']);?> <?php echo ucwords($post['last_name']);?></a>
                   <?php 
-                    foreach ($courses as $course) {
-                      echo ($course['title'] == "") ? '<span class="mr-2"><small style="font-size: 14px; font-weight: 600;">#Global</small></span>' : '<span class="ml-1 mr-2"><small style="font-size: 14px; font-weight: 600;">#'.ucfirst($course['title']).'</small></span>';
+
+                    if(empty($course)){
+                      echo '<span class="mr-2"><small style="font-size: 14px; font-weight: 600;">#Global</small></span>';
+                    } else {
+                      echo '<span class="ml-1 mr-2"><small style="font-size: 14px; font-weight: 600;">#'.ucfirst($course['title']).'</small></span>';
+
                     }
                   ?>
                   <?php if ($post['user_ID'] == $my_info['id']) {?>
@@ -262,7 +246,7 @@
                       <a class="float-right red-text m-1"><i class="fas fa-times delete_comment fa-xs" data-comment-id="<?php echo $comment['comment_ID']; ?>" data-post-id="<?php echo $comment['post_ID'];?>"></i></a>
                       <?php } ?>
                     </h6>
-                    <?php echo $comment['comment']; ?>
+                    <div class="text-break"><?php echo $comment['comment']; ?></div>
                     <?php if(!empty($comment['comment_image'])) { ?>
                       <div class="mt-2 h-50">
                         <div class="d-flex">
@@ -318,8 +302,8 @@
       <div class="modal-body">
         <div class="form-group files">
           <label>Upload Your File </label>
-          <button type="button" class="btn btn-link uploadTrigger mr-2" data-textarea-id="0"></button>
-        </div> 
+          <input type="file" class="form-control" multiple="">
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
@@ -350,7 +334,10 @@
       <div class="modal-body">
         <h4 class="modal-title w-100">Your current login streak <i class="fas fa-fire amber-text"></i> : <?php echo $daily_logins['days']; ?></h4>
         <div class="row justify-content-center">
-          <?php if(date("j", strtotime($daily_logins['timestamp'])) < date("j")){ ?>
+          <?php 
+            $datetime = new DateTime();
+            $date_today = $datetime->format("Y-m-d H:i:s");
+          if(date("Y-m-d H:i:s", strtotime(changetimefromUTC($daily_logins['timestamp'], $timezone))) < $date_today){ ?>
           <a id="accept_reward" data-days="<?php echo $daily_logins['days']; ?>">
             <div class="card hoverable">
               <div class="card-body">
@@ -378,6 +365,9 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
+  <?php if(date("Y-m-d H:i:s", strtotime(changetimefromUTC($daily_logins['timestamp'], $timezone))) < $date_today){ ?>
+    $('#daily_login').modal('show');
+  <?php } ?>
   $("#accept_reward").one('click', function (event) {  
     event.preventDefault();
     var days = $(this).data('days');
@@ -387,11 +377,39 @@ $(document).ready(function(){
       dataType : "JSON",
       data:{days:days},
       success: function(data){
-        toastr.success('Gain 30 exp!');
+        toastr.success('Gain 10 exp!');
         $('#daily_login').modal('hide');
       }
     });
     $(this).prop('disabled', true);
   });
+
+  // var offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
+  // var timezone = (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
+
+  // $("#timezone option[value='" + timezone + "']:first").attr("selected","selected");
+
+// const str = new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' });
+// console.log(str);
+
+// const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+// console.log(timeZone);
+
+// var d = new Date().toLocaleString('en-US', { timeZone }), er = Math.abs(d);
+// var dd = (d < 0 ? "+" : "-") + ("00" + Math.floor(er / 60)).slice(-2) + ":" + ("00" + (er % 60)).slice(-2);
+// console.log(er);
+
+//   $('#timezone').change(function(){ 
+//     var new_timezone=$(this).val();
+
+//     var inputs = $(".schedule");
+//     for(var i = 0; i < inputs.length; i++){
+
+//       var new_timezone = calculate($(inputs[i]).val(), new_timezone);
+//       $('.time_'+i).text(parseFloat(new_timezone));
+//     }
+
+//   });
+
 });
 </script>

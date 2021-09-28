@@ -90,7 +90,7 @@
                       <div class="input-group-prepend">
                         <a class="btn btn-sm btn-success" href='<?php echo base_url(); ?>instructor/course/<?php echo $course['slug'];?>'>Edit Contents</a>
                         <a class="btn btn-sm btn-secondary" href='<?php echo base_url(); ?>instructor/course-students/<?php echo $course['slug'];?>'>View Enrollees</a>
-                        <a class="btn btn-sm btn-primary" href='<?php echo base_url(); ?>instructor/edit/course/<?php echo $course['slug'];?>'>Rename</a>
+                        <a class="btn btn-sm btn-primary" href='<?php echo base_url(); ?>instructor/edit/course/<?php echo $course['slug'];?>'>Edit Details</a>
                         <a class="btn btn-sm btn-info delete_course" data-id="<?php echo $course['course_ID']; ?>">Archive</a>
                       </div>
                     </div>
@@ -142,10 +142,7 @@
           </div>
           <div class="form-group">
             <label for="formGroupExampleInput">Price</label>
-            <input type="number" class="form-control" name="price" id="price" min="0" step="0.01" max="1000000" required>
-            <div class="invalid-feedback">
-              Required
-            </div>
+            <input type="number" class="form-control" name="price" id="price" min="0" step="0.01" max="1000000">
           </div>
           <label for="formGroupExampleInput">Category</label>
           <div class="input-group mb-4" style="width: 100%;">

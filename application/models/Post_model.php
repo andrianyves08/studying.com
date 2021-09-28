@@ -38,7 +38,6 @@
 			$this->db->limit($limit, $start);
 		}
 
-		$this->db->group_by('post.post');
 		$query = $this->db->get('post');
 		return $query->result_array();
 	}
@@ -56,7 +55,7 @@
 	}
 
 	public function get_following_post($limit, $start, $status, $user_ID){
-    	$this->db->select('users.username, users.first_name, users.last_name, users.image, post.id as post_ID, post.user_ID, post.status as post_status, post.timestamp, post.post, post.privacy, post.pin');
+    	$this->db->select('users.username, users.first_name, users.last_name, users.image, post.id as post_ID, post.user_ID, post.status as post_status, post.timestamp, post.post, post_to_course.course_ID, post.privacy, post.pin');
     	$this->db->join('users', 'users.id = post.user_ID');
     	$this->db->join('users_follow', 'post.user_ID = users_follow.following');
     	$this->db->join('post_to_course', 'post_to_course.post_ID = post.id');
@@ -69,7 +68,7 @@
     	if(!empty($limit)){
 			$this->db->limit($limit, $start);
 		}
-		$this->db->group_by('post.post');
+
 		$query = $this->db->get('post');
 		return $query->result_array();
 	}
@@ -98,7 +97,7 @@
 			$query = $this->db->get('post');
 			return $query->result_array();
 		}
-		$this->db->group_by('post.post');
+
 		$query = $this->db->get_where('post', array('post.user_ID' => $id));
 		return $query->result_array();
 	}
@@ -157,7 +156,7 @@
 	}
 
 	public function create_post($course_ID, $files, $posts, $user_ID, $tagged_users){
-		$this->db->trans_begin();
+	//	$this->db->trans_begin();
 		$sql = $this->get_review_status();
 
 		if($sql['review_post_status'] == 0){
@@ -169,7 +168,8 @@
 		$data = array(
 			'user_ID' => $user_ID,
 			'post' => $posts,
-			'status' => $status
+			'status' => $status,
+			'privacy' => '0'
 		);
 		
 		$this->db->set('timestamp', 'NOW()', FALSE);
@@ -180,15 +180,18 @@
 			$this->notify->tag_users(4, 1, $post_id, $tagged_users, $user_ID);
 		}
 
-		$total = count($files);
-		for($i=0; $i<$total; $i++) {
-			if(trim($files[$i] != '')) {
-				$file_name = $files[$i];
-		        $data3 = array(
-		        	'post_ID' => $post_id,
-		        	'file' => $file_name
-				);
-				$this->db->insert('post_file', $data3);
+
+		if(!empty($files)){
+			$total = count($files);
+			for($i=0; $i<$total; $i++) {
+				if(trim($files[$i] != '')) {
+					$file_name = $files[$i];
+			        $data3 = array(
+			        	'post_ID' => $post_id,
+			        	'file' => $file_name
+					);
+					$this->db->insert('post_file', $data3);
+				}
 			}
 		}
 

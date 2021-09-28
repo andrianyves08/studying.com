@@ -7,14 +7,12 @@
         <span>/</span>
         <span><a href="<?php echo base_url();?>instructor/course">Course</a></span>
         <span>/</span>
-        <span><a href="<?php echo base_url();?>instructor/course/<?php echo ucwords($course['slug']);?>"><?php echo ucwords($course['title']);?></a></span>
-        <span>/</span>
-        <span><a href="<?php echo base_url();?>instructor/course/<?php echo ucwords($course['slug']);?>"><?php echo ucwords($module['title']);?></a></span>
+        <span><a href="<?php echo base_url();?>instructor/course/<?php echo $course['slug'];?>"><?php echo ucwords($module['title']);?></a></span>
         <span>/</span>
         <span><?php echo ucwords($section['title']);?></span>
       </h4>
       <h4 class="mb-2 mb-sm-0 pt-1 float-right">
-        <span><a href="<?php echo base_url();?>instructor/course/<?php echo ucwords($course['slug']);?>">Back</a></span>
+        <span><a href="<?php echo base_url();?>instructor/course/<?php echo $course['slug'];?>/<?php echo $module['slug'];?>">Back</a></span>
       </h4>
     </div>
   </div>

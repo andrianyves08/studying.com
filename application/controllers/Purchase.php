@@ -49,7 +49,7 @@ class Purchase extends CI_Controller {
 	}
 
 	function enroll() {
-		$data = $this->purchase_model->add_purchase($this->session->userdata('user_id'), $this->input->post('id'), '2', 'Enrolling', 0, NULL);	
+		$data = $this->purchase_model->add_purchase($this->session->userdata('user_id'), $this->input->post('id'), '1', 'Enrolling', 0, NULL);	
 		echo json_encode($data);
 	}
 

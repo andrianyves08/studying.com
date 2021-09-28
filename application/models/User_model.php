@@ -42,6 +42,8 @@
 		);
 		$this->db->insert('group_member', $data2);
 
+		$this->start_daily_login_reward($last_id);
+
 		if ($this->db->trans_status() === FALSE){
 		    $this->db->trans_rollback();
 		    return false;
@@ -76,6 +78,7 @@
 			'status' => '1'
 		);
 		$this->db->insert('group_member', $data2);
+		$this->start_daily_login_reward($last_id);
 
 		$numberteam = count($this->input->post('course'));
 	    for($i=0; $i<$numberteam; $i++) {
@@ -100,19 +103,19 @@
 		}
 	}
 
-    function approve_as_instructor($user_ID){
+    function approve_as_instructor($id, $user_ID){
 		$this->db->trans_begin();
 		$this->load->model('notification_model', 'notify');
 
-		$this->notify->create_notification(5, 12, 0, $user_ID, 0);
-
 		$this->db->set('status', '1');
-		$this->db->where('user_ID', $user_ID);
+		$this->db->where('id', $id);
 		$this->db->update('instructor_detail');
 
 		$this->db->set('role', '1');
 		$this->db->where('id', $user_ID);
 		$this->db->update('users');
+
+		$this->notify->create_notification(5, 12, $id, $user_ID, 0);
 
 		if ($this->db->trans_status() === FALSE){
 		    $this->db->trans_rollback();
@@ -123,14 +126,14 @@
 		}
 	}
 
-	function deny_as_instructor($user_ID){
+	function deny_as_instructor($id, $user_ID){
 		$this->db->trans_begin();
 		$this->load->model('notification_model', 'notify');
 
-		$this->notify->create_notification(5, 13, 0, $user_ID, 0);
+		$this->notify->create_notification(5, 13, $id, $user_ID, 0);
 
 		$this->db->set('status', '2');
-		$this->db->where('user_ID', $user_ID);
+		$this->db->where('id', $id);
 		$this->db->update('instructor_detail');
 		
 		if ($this->db->trans_status() === FALSE){

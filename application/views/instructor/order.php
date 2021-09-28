@@ -20,7 +20,6 @@
                 <th style="width: 25%;">Course</th>
                 <th style="width: 15%;">Date Enrolled</th>
                 <th style="width: 15%;">Status</th>
-                <th style="width: 20%;"></th>
               </thead>
               <tbody>
               <?php foreach($orders as $row){ ?> 
@@ -42,11 +41,6 @@
                       <span class="badge badge-pill badge-success"><?php echo ucwords($row['purchase_status_name']);?></span>
                     <?php } else { ?>
                       <span class="badge badge-pill badge-info"><?php echo ucwords($row['purchase_status_name']);?></span>
-                    <?php } ?>
-                  </td>
-                  <td>
-                    <?php if($row['purchase_status'] == '2'){ ?>
-                      <a class="btn btn-sm btn-success enroll" data-purchase-id="<?php echo $row['purchase_ID'];?>" data-user-id="<?php echo $row['user_ID'];?>"> Approve</a><a class="btn btn-sm btn-danger deny" data-purchase-id="<?php echo $row['purchase_ID'];?>" data-user-id="<?php echo $row['user_ID'];?>"> Deny</a>
                     <?php } ?>
                   </td>
                 </tr>
@@ -107,44 +101,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-  //Approve post
-  $(document).on("click", ".enroll", function() { 
-    var id=$(this).data('purchase-id');
-    var user_ID=$(this).data('user-id');
-    var status='1';
-    alert_sound.play();
-    if(confirm("Are you sure you want to enroll this student?")){
-      $.ajax({
-        type : "POST",
-        url  : "<?=base_url()?>purchase/update_purchase",
-        dataType : "JSON",
-        data : {id:id, user_ID:user_ID, status:status},
-        success: function(data){
-          location.reload();
-        }
-      });
-    }
-  });
-
-  //Approve post
-  $(document).on("click", ".deny", function() {
-   var id=$(this).data('purchase-id');
-   var user_ID=$(this).data('user-id');
-   var status='5';
-    alert_sound.play();
-    if(confirm("Are you sure you want to deny this student?")){
-      $.ajax({
-        type : "POST",
-        url  : "<?=base_url()?>purchase/update_purchase",
-        dataType : "JSON",
-        data : {id:id, user_ID:user_ID, status:status},
-        success: function(data){
-          location.reload();
-        }
-      });
-    }
-  });
-
   $('#submit_enrollment').on('click',function(){
     var user_ID = $('[name="user_ID"]').val();
     var course_ID = $('[name="course"]').val();

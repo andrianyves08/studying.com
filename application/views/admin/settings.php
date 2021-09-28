@@ -23,9 +23,9 @@
               $datetime->setTimeZone(new DateTimeZone('+08:00'));
               $triggerOn = $datetime->format('h:i A');
 
-                echo $triggerOn;
+              echo $triggerOn;
 
-               ?>
+              ?>
               <tr>
                 <td>System Status</td>
                 <td>

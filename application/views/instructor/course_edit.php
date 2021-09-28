@@ -40,10 +40,7 @@
             </div>
             <div class="form-group">
               <label for="formGroupExampleInput">Price</label>
-              <input type="number" class="form-control" name="price" id="price" min="0" step="0.01" max="10000" value="<?php echo $course['price']; ?>" required>
-              <div class="invalid-feedback">
-                Required
-              </div>
+              <input type="number" class="form-control" name="price" id="price" min="0" step="0.01" max="10000" value="<?php echo $course['price']; ?>">
             </div>
             <label for="formGroupExampleInput">Category</label>
             <div class="input-group mb-4" style="width: 100%;">

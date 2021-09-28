@@ -9,6 +9,7 @@
     	$this->db->select('*, course.id as course_ID');
 		$this->db->like('title', $search);
 		$this->db->where('status', '1');
+		$this->db->where('privacy', '0');
 		if(!empty($limit)){
 			$this->db->limit($limit, $start);
 		}
@@ -23,6 +24,7 @@
 		$this->db->like('course_module.title', $search);
 		$this->db->where('course_module.status', '1');
 		$this->db->where('course.status', '1');
+		$this->db->where('course.privacy', '0');
 		if(!empty($limit)){
 			$this->db->limit($limit, $start);
 		}
@@ -40,6 +42,7 @@
 		$this->db->where('course_section.status', '1');
 		$this->db->where('course_module.status', '1');
 		$this->db->where('course.status', '1');
+		$this->db->where('course.privacy', '0');
 		if(!empty($limit)){
 			$this->db->limit($limit, $start);
 		}
@@ -58,6 +61,7 @@
 		$this->db->where('course_section.status', '1');
 		$this->db->where('course_module.status', '1');
 		$this->db->where('course.status', '1');
+		$this->db->where('course.privacy', '0');
 		if(!empty($limit)){
 			$this->db->limit($limit, $start);
 		}
@@ -78,6 +82,7 @@
 		$this->db->where('course_section.status', '1');
 		$this->db->where('course_module.status', '1');
 		$this->db->where('course.status', '1');
+		$this->db->where('course.privacy', '0');
 		if(!empty($limit)){
 			$this->db->limit($limit, $start);
 		}
@@ -211,6 +216,7 @@
     	$this->db->where('course_to_category.category_ID', $category_ID);
     	$this->db->order_by('course.title', 'ASC');
     	$this->db->where('course.status', '1');
+    	$this->db->where('course.privacy', '0');
     	if(!empty($limit)){
 			$this->db->limit($limit, $start);
 		}
@@ -1021,5 +1027,73 @@
 		$this->db->delete('course_content', array('id' => $content_ID));
 		$this->db->delete('course_content_file', array('content_ID' => $content_ID));
 		$this->db->delete('videos', array('content_ID' => $content_ID));
+	}
+
+	public function hide_all_module($module_ID, $status){
+		$this->db->trans_begin();
+
+		$this->db->set('status', $status);
+		$this->db->where('id', $module_ID);
+		$this->db->update('course_module');
+
+		$this->db->set('status', $status);
+		$this->db->where('module_ID', $module_ID);
+		$this->db->update('course_section');
+
+		foreach ($this->get_sections($module_ID) as $row){
+			$this->hide_all_section($row['id'], $status);
+		}
+
+		if ($this->db->trans_status() === FALSE){
+		    $this->db->trans_rollback();
+		    return false;
+		} else {
+		    $this->db->trans_commit();
+		    return true;
+		}
+	}
+
+	public function hide_all_section($section_ID, $status){
+		$this->db->trans_begin();
+
+		$this->db->set('status', $status);
+		$this->db->where('id', $section_ID);
+		$this->db->update('course_section');
+
+		$this->db->set('status', $status);
+		$this->db->where('section_ID', $section_ID);
+		$this->db->update('course_lesson');
+
+		foreach ($this->get_lessons($section_ID) as $row){
+			$this->hide_all_lesson($row['id'], $status);
+		}
+
+		if ($this->db->trans_status() === FALSE){
+		    $this->db->trans_rollback();
+		    return false;
+		} else {
+		    $this->db->trans_commit();
+		    return true;
+		}
+	}
+
+	public function hide_all_lesson($lesson_ID, $status){
+		$this->db->trans_begin();
+
+		$this->db->set('status', $status);
+		$this->db->where('id', $lesson_ID);
+		$this->db->update('course_lesson');
+
+		$this->db->set('status', $status);
+		$this->db->where('lesson_ID', $lesson_ID);
+		$this->db->update('course_content');
+
+		if ($this->db->trans_status() === FALSE){
+		    $this->db->trans_rollback();
+		    return false;
+		} else {
+		    $this->db->trans_commit();
+		    return true;
+		}
 	}
 }

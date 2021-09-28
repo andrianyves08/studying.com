@@ -24,22 +24,22 @@ CKEDITOR.config.readOnly = true;
 CKEDITOR.config.removeButtons = 'Copy';
 function create_ckeditor(element){
   CKEDITOR.replace(element, {
-    height: 500,
+    toolbar: [],
+    height: 500
   });
 }
 </script>
 <main class="pt-5 mx-lg-5">
 <!-- <main class="pt-5 mx-lg-5" oncontextmenu="return false;"> -->
 <div class="container-fluid mt-5">
-  <h3 class="mb-4 pt-4 ml-2 mr-2 text-center" id="main_header">
+  <h3 class="mb-4 pt-4 text-center" id="main_header">
     <span class="dropdown">
       <a class="dropdown-toggle text-wrap blue-text" data-toggle="dropdown" id="course_drop" aria-haspopup="true" aria-expanded="false">
         <strong><?php echo ucwords($module['title']);?></strong>
       </a>
       <div class="dropdown-menu" id="course_dropdown" aria-labelledby="course_drop">
         <?php foreach ($modules as $value) { 
-           if($value['status'] == '1'){
-
+          if($value['status'] == '1'){
         ?>
           <?php if ($value['title'] == $module['title']) { ?>
             <a class="dropdown-item waves-effect waves-light blue-text" href="<?php echo base_url().'course/'.$course['slug'].'/'.$value['slug'];?>/"><?php echo $value['title']; ?></a>
@@ -66,6 +66,8 @@ function create_ckeditor(element){
         <?php } } ?> 
       </div>
     </span>
+    <span>/</span>
+    <span><a class="blue-text" href="<?php echo base_url().'course/'.$course['slug'];?>">Back</a></span>
   </h3>
   <div class="row justify-content-center">
     <div class="col-md-8 mb-4">

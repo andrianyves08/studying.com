@@ -31,7 +31,7 @@
         return $query->result_array();
     }
 
-    public function create_schedule($day, $time, $timezone, $user_ID){
+    public function create_schedule($day, $time, $timezone, $note, $user_ID){
         $this->db->trans_begin();
 
         $data = array(
@@ -39,6 +39,7 @@
             'day' => $day,
             'time' => $time,
             'timezone' => $timezone,
+            'note' => $note,
         );
         $this->db->insert('instructor_schedule', $data);
 

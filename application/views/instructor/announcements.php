@@ -38,22 +38,22 @@
             <tr class="id_<?php echo $row['id']; ?>">
               <td><?php 
               switch ($row['day']) {
-                case 1:
+                case '2021-09-20':
                   echo 'Monday';
                   break;
-                case 2:
+                case '2021-09-21':
                   echo 'Tuesday';
                   break;
-                case 3:
+                case '2021-09-22':
                   echo 'Wednesday';
                   break;
-                case 4:
+                case '2021-09-23':
                   echo 'Thursday';
                   break;
-                case 5:
+                case '2021-09-24':
                   echo 'Friday';
                   break;
-                case 6:
+                case '2021-09-25':
                   echo 'Saturday';
                   break;
                 default:
@@ -95,13 +95,13 @@
           <label>Day</label>
           <select class="browser-default custom-select" id="day">
             <option selected disabled>Select Day</option>
-            <option value="1">Monday</option>
-            <option value="2">Tuesday</option>
-            <option value="3">Wednesday</option>
-            <option value="4">Thursday</option>
-            <option value="5">Friday</option>
-            <option value="6">Saturday</option>
-            <option value="7">Sunday</option>
+            <option value="2021-09-20">Monday</option>
+            <option value="2021-09-21">Tuesday</option>
+            <option value="2021-09-22">Wednesday</option>
+            <option value="2021-09-23">Thursday</option>
+            <option value="2021-09-24">Friday</option>
+            <option value="2021-09-25">Saturday</option>
+            <option value="2021-09-26">Sunday</option>
           </select>
         </div>
         <div class="form-group">
@@ -109,50 +109,11 @@
           <input type="text" class="form-control" id="time" name="time" />
         </div>
         <div class="form-group">
-          <label>Timezone</label>
-          <select name="timezone" id="timezone" class="form-control">
-            <option value="-12:00">(GMT -12:00) Eniwetok, Kwajalein</option>
-            <option value="-11:00">(GMT -11:00) Midway Island, Samoa</option>
-            <option value="-10:00">(GMT -10:00) Hawaii</option>
-            <option value="-09:50">(GMT -9:30) Taiohae</option>
-            <option value="-09:00">(GMT -9:00) Alaska</option>
-            <option value="-08:00">(GMT -8:00) Pacific Time (US &amp; Canada)</option>
-            <option value="-07:00">(GMT -7:00) Mountain Time (US &amp; Canada)</option>
-            <option value="-06:00">(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
-            <option value="-05:00">(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
-            <option value="-04:50">(GMT -4:30) Caracas</option>
-            <option value="-04:00">(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
-            <option value="-03:50">(GMT -3:30) Newfoundland</option>
-            <option value="-03:00">(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
-            <option value="-02:00">(GMT -2:00) Mid-Atlantic</option>
-            <option value="-01:00">(GMT -1:00) Azores, Cape Verde Islands</option>
-            <option value="+00:00" selected="selected">(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
-            <option value="+01:00">(GMT +1:00) Brussels, Copenhagen, Madrid, Paris</option>
-            <option value="+02:00">(GMT +2:00) Kaliningrad, South Africa</option>
-            <option value="+03:00">(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
-            <option value="+03:50">(GMT +3:30) Tehran</option>
-            <option value="+04:00">(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
-            <option value="+04:50">(GMT +4:30) Kabul</option>
-            <option value="+05:00">(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
-            <option value="+05:50">(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</option>
-            <option value="+05:75">(GMT +5:45) Kathmandu, Pokhara</option>
-            <option value="+06:00">(GMT +6:00) Almaty, Dhaka, Colombo</option>
-            <option value="+06:50">(GMT +6:30) Yangon, Mandalay</option>
-            <option value="+07:00">(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
-            <option value="+08:00">(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
-            <option value="+08:75">(GMT +8:45) Eucla</option>
-            <option value="+09:00">(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
-            <option value="+09:50">(GMT +9:30) Adelaide, Darwin</option>
-            <option value="+10:00">(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
-            <option value="+10:50">(GMT +10:30) Lord Howe Island</option>
-            <option value="+11:00">(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
-            <option value="+11:50">(GMT +11:30) Norfolk Island</option>
-            <option value="+12:00">(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
-            <option value="+12:75">(GMT +12:45) Chatham Islands</option>
-            <option value="+13:00">(GMT +13:00) Apia, Nukualofa</option>
-            <option value="+14:00">(GMT +14:00) Line Islands, Tokelau</option>
-          </select>
+          <label>Note</label>
+          <input type="text" class="form-control" id="note" name="note" />
         </div>
+        <input type="hidden" class="form-control" name="timezone" id="timezone" value="<?php echo $my_info['timezone']; ?>"/>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
@@ -170,7 +131,7 @@ CKEDITOR.replace('announcement' ,{
 <script type="text/javascript">
 $(document).ready(function() {
    $('#time').timepicker({
-      timeFormat: 'h:mm p',
+      timeFormat: 'h:mm:ss p',
       interval: 60,
       minTime: '10',
       maxTime: '6:00pm',
@@ -185,11 +146,12 @@ $(document).ready(function() {
     var day = $('#day').val();
     var time = $('#time').val();
     var timezone = $('#timezone').val();
+    var note = $('#note').val();
     $.ajax({
       type : "POST",
       url  : "<?=base_url()?>instructor/create_schedule",
       dataType : "JSON",
-      data : {day:day, time:time, timezone:timezone},
+      data : {day:day, time:time, timezone:timezone, note:note},
       success: function(data){
         if(data.error){
           toastr.error(data.message);

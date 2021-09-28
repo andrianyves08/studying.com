@@ -157,12 +157,6 @@ p, h1, h2, h3, h4, h5, h6, label, td, dt, dd, li, span, tr{
     var offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
     var timezone = (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
     $('#timezone').val(timezone);
-    $('#username').keydown(function(e) {
-      if (e.keyCode === 190 || e.keyCode === 110) {
-        e.preventDefault();
-        toastr.error('dot character are forbidden');
-      }
-    });
   </script>
   <script type="text/javascript">
     (function() {

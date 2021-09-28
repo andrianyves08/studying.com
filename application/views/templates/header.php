@@ -132,15 +132,8 @@ main {
 }
 
 body { 
-  background: url("<?php echo base_url();?>assets/img/<?php echo $settings['background_image']; ?>") no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: -200;
+  
+ background-color: #E9EBEE;
 }
 
 /* Style the video: 100% width and height to cover the entire window */
@@ -536,7 +529,6 @@ function nanogallery(id, images) {
     galleryMaxRows: 2,
     galleryDisplayMode: 'rows',
     thumbnailAlignment: 'center',
-    thumbnailHeight: '300', thumbnailWidth: '300',
     thumbnailBorderHorizontal: 0, thumbnailBorderVertical: 0,
     thumbnailLabel: { display: false },
     position: 'onBottom',

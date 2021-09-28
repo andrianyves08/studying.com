@@ -176,6 +176,28 @@ $(document).ready(function(){
     get_user_status();
   }, 5000);
 
+  
+
+  function send_message(to_ID, message_ID, type, message){
+    $.ajax({
+      url:"<?=base_url()?>messages/send_message",
+      method:"POST",
+      async : true,
+      dataType : 'json',
+      data:{to_ID:to_ID, message:message, message_ID:message_ID, type:type},
+      success:function(data) {
+        level_up.play();
+        toastr.success(' 1 Exp Gained!');
+        get_message_content(to_ID, type, start);
+        get_message_header();
+        CKEDITOR.instances['messages'].setData('');
+        $(".replying").text('');
+        $(".clear_replay").hide();
+        $(".send_message").data("message-id", 0);
+      }
+    });
+  }
+
   function get_user_status(){
     $.ajax({
       type  : 'post',
@@ -218,14 +240,19 @@ $(document).ready(function(){
         var i;
         for(i=0; i<data.length; i++){
           html += '<a class="start_chat header_'+data[i].data_id+'" data-header-id="'+data[i].id+'" data-id="'+data[i].data_id+'" data-name="'+data[i].name+'" data-type="'+data[i].type+'"  data-username="'+data[i].username+'"><div class="card-body d-flex flex-row message_header';
-        if(i == 0){
-          html += ' bg-light';
-        }
-        html += '" id="message_header_'+data[i].id+'"><img src="'+data[i].image+'" class="rounded-circle mr-2 chat-mes-id-2" alt="avatar" style="height: 50px;width: 50px;" onerror="this.onerror=null;this.src=\'<?php echo base_url();?>assets/img/users/stock.jpg\';"><div><h6 class="user_names">'+data[i].name+'<span class="badge badge-danger badge-pill ml-2 new_messages_'+data[i].data_id+'"></span></h6>';
-        if("level" in data[i]){
-        html += '<img src="<?php echo base_url(); ?>assets/img/'+data[i].level_image+'" class="rounded-circle" height="25px" width="25px" alt="avatar">Level '+data[i].level+'<span class="ml-2 text-muted last_login_'+data[i].data_id+'" style="font-size: 12px;"></span><br><span class="text-muted snippet_'+data[i].data_id+'"></span>';
-        }
+          if(i == 0){
+            html += ' bg-light';
+          }
+          html += '" id="message_header_'+data[i].id+'"><img src="'+data[i].image+'" class="rounded-circle mr-2 chat-mes-id-2" alt="avatar" style="height: 50px;width: 50px;" onerror="this.onerror=null;this.src=\'<?php echo base_url();?>assets/img/users/stock.jpg\';"><div><h6 class="user_names">'+data[i].name+'<span class="badge badge-danger badge-pill ml-2 new_messages_'+data[i].data_id+'"></span></h6>';
+          if("level" in data[i]){
+          html += '<img src="<?php echo base_url(); ?>assets/img/'+data[i].level_image+'" class="rounded-circle" height="25px" width="25px" alt="avatar">Level '+data[i].level+'<span class="ml-2 text-muted last_login_'+data[i].data_id+'" style="font-size: 12px;"></span><br><span class="text-muted snippet_'+data[i].data_id+'"></span>';
+          }
           html += '</div></div></a>';
+
+          if(i == 0){
+            make_message_dialog_box(data[i].data_id, data[i].name, data[i].type, data[i].username);
+            $('.start_chat header_'+data[i].data_id).trigger('click');
+          }
         }
         $('#message_header').html(html);
       }
@@ -237,20 +264,17 @@ $(document).ready(function(){
     var data_ID = $(this).data('id');
     var name = $(this).data('name');
     var username = $(this).data('username');
-    // type = 1 = user else group.
+    // (type == 1) : user : group.
     var type = $(this).data('type');
     make_message_dialog_box(data_ID, name, type, username);
     $('#message_header_'+header).addClass("bg-light");
     $('.message_header').not("#message_header_"+header).removeClass("bg-light"); 
     on_interval = true;
-
     $('#message_menu').hide();
     $('#message_content').animate({ width: 'show' });
-
     $('#scroll_to_bottom').stop().animate({
       scrollTop: $('main')[0].scrollHeight
     }, 500);
-
   });
 
 
@@ -316,7 +340,7 @@ $(document).ready(function(){
             if(data[i].parent_message != 0){
               html += '<div class="text-muted ml-3" style="font-size: 16px;">'+data[i].parent_message_content+'</div><p class="text-muted text-left ml-3" style="font-size: 12px;">You replied to '+data[i].parent_message_sender+' '+data[i].parent_message_timestamp+'</p><hr class="mt-1 mb-3">';
             }
-            html += '<p class="dark-text" style="font-size: 16px;">'+data[i].message+'</p></div><p class="text-muted p-2 text-right" style="font-size: 12px;">'+data[i].timestamp+'<a class="delete_message" data-message-id="'+data[i].message_ID+'" data-type="'+type+'"><span class="red-text p-2">&times;</span></a></p></div>';
+            html += '<p class="dark-text" style="font-size: 13px;">'+data[i].message+'</p></div><p class="text-muted p-2 text-right" style="font-size: 12px;">'+data[i].timestamp+'<a class="delete_message" data-message-id="'+data[i].message_ID+'" data-type="'+type+'"><span class="red-text p-2">&times;</span></a></p></div>';
           }
           html += '</div>';
           if(data[i].message_status == '1' && data[i].max == data[i].i){
@@ -415,23 +439,7 @@ $(document).ready(function(){
     var message = CKEDITOR.instances['messages'].getData();
     <?php if(!empty($my_purchases)){?>
       if(message != ''){
-        $.ajax({
-          url:"<?=base_url()?>messages/send_message",
-          method:"POST",
-          async : true,
-          dataType : 'json',
-          data:{to_ID:to_ID, message:message, message_ID:message_ID, type:type},
-          success:function(data) {
-            level_up.play();
-            toastr.success(' 1 Exp Gained!');
-            get_message_content(to_ID, type, start);
-            get_message_header();
-            CKEDITOR.instances['messages'].setData('');
-            $(".replying").text('');
-            $(".clear_replay").hide();
-            $(".send_message").data("message-id", 0);
-          }
-        })
+        send_message(to_ID, message_ID, type, message);
       } else {
         error_sound.play();
         toastr.error('Enter a message');
@@ -523,15 +531,45 @@ $(document).ready(function(){
     return false;
   });
 
+
+
+
+
+
   function create_editor() {
     CKEDITOR.config.disableNativeSpellChecker = false;
-    CKEDITOR.replace('messages', {
+    var messageEditor = CKEDITOR.replace('messages', {
+      blockedKeystrokes: [13],
       forcePasteAsPlainText : true,       
       plugins: 'mentions,emoji,basicstyles,undo,link,wysiwygarea,toolbar, pastetext',
       height: 60,
       width: 500,
       width: '99%',
       toolbar: [{name: 'document', items: ['Undo', 'Redo']},{name: 'links', items: ['EmojiPanel', 'Link', 'Unlink']}]
+    });
+
+    messageEditor.on("contentDom", function() {
+      messageEditor.document.on("keyup", function(event) {
+        if( event.data.getKeystroke() == 13 ) {
+          messageEditor.focus();
+          var to_ID = $(".send_message").data('to-id');
+          var message_ID = $(".send_message").data('message-id');
+          var type = $(".send_message").data('type');
+          var message = CKEDITOR.instances['messages'].getData();
+          <?php if(!empty($my_purchases)){?>
+            if(message != ''){
+              send_message(to_ID, message_ID, type, message)
+            } else {
+              error_sound.play();
+              toastr.error('Enter a message');
+            }
+          <?php } else { ?>
+            toastr.error('Forbidden. You haven\nt bought any courses!'); 
+          <?php } ?>
+          event.data.preventDefault();
+          return false;
+        }
+      });
     });
   }
 
@@ -565,7 +603,8 @@ $(document).ready(function(){
     });
     
     CKEDITOR.config.disableNativeSpellChecker = false;
-    CKEDITOR.replace('messages', {
+    var groupEditor = CKEDITOR.replace('messages', {
+      blockedKeystrokes: [13],
       forcePasteAsPlainText : true,       
       plugins: 'mentions,emoji,basicstyles,undo,link,wysiwygarea,toolbar, pastetext',
       height: 60,
@@ -590,6 +629,31 @@ $(document).ready(function(){
         }
       ]
     });
+
+    groupEditor.on("contentDom", function() {
+      groupEditor.document.on("keyup", function(event) {
+        if( event.data.getKeystroke() == 13 ) {
+          groupEditor.focus();
+          var to_ID = $(".send_message").data('to-id');
+          var message_ID = $(".send_message").data('message-id');
+          var type = $(".send_message").data('type');
+          var message = CKEDITOR.instances['messages'].getData();
+          <?php if(!empty($my_purchases)){?>
+            if(message != ''){
+              send_message(to_ID, message_ID, type, message)
+            } else {
+              error_sound.play();
+              toastr.error('Enter a message');
+            }
+          <?php } else { ?>
+            toastr.error('Forbidden. You haven\nt bought any courses!'); 
+          <?php } ?>
+          event.data.preventDefault();
+          return false;
+        }
+      });
+    });
+
   }
 
   function dataFeed(opts, callback) {

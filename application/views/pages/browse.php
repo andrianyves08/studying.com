@@ -25,6 +25,11 @@
     $array[] = $my_purchase['course_ID'];
   }
 ?>
+<style type="text/css">
+  .flex-1 {
+flex: 1;
+}
+</style>
 <main class="pt-5 mx-lg-5">
   <div class="container mt-5">
     <div class="row justify-content-center">
@@ -54,20 +59,21 @@
             <?php foreach ($courses as $course){
               if($course['privacy'] == '0'){
               $rating = $CI->review_model->get_rating(3, $course['course_ID']); ?>
-              <div class="col-lg-3 col-md-3 col-sm-6 d-flex align-items-stretch courses">
-                <a href="<?php base_url(); ?>course/detail/<?php echo $course['slug']; ?>" style="cursor: pointer:">
+              <div class="col-lg-3 col-sm-6 d-flex align-items-stretch courses">
                 <div class="card text-center mb-4">
                   <img class="card-img-top chat-mes-id-3" src="<?php echo $course['image']; ?>" alt="Card image cap" onerror="this.onerror=null;this.src='<?php echo base_url();?>assets/img/logo-3.jpg';">
                   <div class="card-body">
-                    <p class="mb-1 font-weight-bold black-text"><?php echo ucfirst($course['title']); ?> <?php 
+                    <a href="<?php base_url(); ?>course/detail/<?php echo $course['slug']; ?>" class="mb-1 font-weight-bold black-text"><?php echo ucfirst($course['title']); ?>
+                    </a>
+                    <br>
+                    <?php 
                       if (in_array($course['course_ID'], $array)) {
                         echo "<span class='badge badge-pill badge-success'>Bought</span>";
                       }
-                    ?></p>
+                    ?>
                     <?php echo renderStarRating($rating['avg']); ?>
                   </div>
                 </div>
-                </a>
               </div>
             <?php } } ?>
           </div>
@@ -126,8 +132,8 @@ $(document).ready(function(){
         var html = '';
         var i;
         for(i=0; i<data.length; i++){
-          html += '<div class="col-lg-3 col-md-3 col-sm-6 d-flex align-items-stretch courses"><a href="<?php echo base_url(); ?>course/detail/'+data[i].slug+'"><div class="card text-center mb-4"><img class="card-img-top chat-mes-id-3" src="'+data[i].image+'" alt="Card image cap" onerror="this.onerror=null;this.src=\'<?php echo base_url();?>assets/img/logo-3.jpg\';">';
-          html += '<div class="card-body"><p class="mb-1 font-weight-bold black-text">'+data[i].title+'</p>'+data[i].rating+'</div></div></a></div>';
+          html += '<div class="col-lg-3 col-md-3 col-sm-6 d-flex align-items-stretch courses"><div class="card text-center mb-4"><img class="card-img-top chat-mes-id-3" src="'+data[i].image+'" alt="Card image cap" onerror="this.onerror=null;this.src=\'<?php echo base_url();?>assets/img/logo-3.jpg\';">';
+          html += '<div class="card-body"><a href="<?php echo base_url(); ?>course/detail/'+data[i].slug+'" class="mb-1 font-weight-bold black-text">'+data[i].title+'</a><br>'+data[i].rating+'</div></div></a></div>';
         }
         if(feed == 1){
           $(".courses:last").after(html).show().fadeIn("slow");

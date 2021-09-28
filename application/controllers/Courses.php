@@ -145,7 +145,7 @@ class Courses extends CI_Controller {
         $this->form_validation->set_rules('title', 'Title', 'required', array('required' => 'Title is required.'));
         $this->form_validation->set_rules('description', 'Description', 'required', array('required' => 'Description is required.'));
         $this->form_validation->set_rules('keywords', 'Keywords', 'required', array('required' => 'Keywords is required.'));
-        $this->form_validation->set_rules('price', 'Price', 'required', array('required' => 'Price is required.'));
+        $this->form_validation->set_rules('price', 'Price', 'numeric');
         $this->form_validation->set_rules('category[]', 'Category', 'required', array('required' => 'Category is required.'));
 
         if ($this->form_validation->run() === FALSE) {
@@ -154,7 +154,9 @@ class Courses extends CI_Controller {
 				'message' => validation_errors()
 			);
 	    } else {
-			$create = $this->course_model->create_course($this->input->post('title'), $this->input->post('description'), $this->input->post('keywords'), $this->input->post('price'), $this->input->post('category'), $this->input->post('image'), $this->session->userdata('user_id'));
+	    	$price  = empty($this->input->post('price')) ? NULL : $this->input->post('price');
+
+			$create = $this->course_model->create_course($this->input->post('title'), $this->input->post('description'), $this->input->post('keywords'), $price, $this->input->post('category'), $this->input->post('image'), $this->session->userdata('user_id'));
 
 			if($create){
 				$data = array(
@@ -285,7 +287,7 @@ class Courses extends CI_Controller {
       	$this->form_validation->set_rules('title', 'Title', 'required', array('required' => 'Title is required.'));
         $this->form_validation->set_rules('description', 'Description', 'required', array('required' => 'Description is required.'));
         $this->form_validation->set_rules('keywords', 'Keywords', 'required', array('required' => 'Keywords is required.'));
-        $this->form_validation->set_rules('price', 'Price', 'required', array('required' => 'Price is required.'));
+        $this->form_validation->set_rules('price', 'Price', 'numeric');
         $this->form_validation->set_rules('category[]', 'Category', 'required', array('required' => 'Category is required.'));
         if ($this->form_validation->run() === FALSE) {
         	$data = array(
@@ -293,7 +295,9 @@ class Courses extends CI_Controller {
 				'message' => validation_errors()
 			);
 	    } else {
-			$create = $this->course_model->update_course($this->input->post('course_ID'), $this->input->post('title'), $this->input->post('description'), $this->input->post('keywords'), $this->input->post('price'), $this->input->post('category'), $this->input->post('image'), $this->session->userdata('user_id'));
+	    	$price  = empty($this->input->post('price')) ? NULL : $this->input->post('price');
+
+			$create = $this->course_model->update_course($this->input->post('course_ID'), $this->input->post('title'), $this->input->post('description'), $this->input->post('keywords'), $price, $this->input->post('category'), $this->input->post('image'), $this->session->userdata('user_id'));
 
 			if($create){
 				$data = array(
@@ -322,6 +326,11 @@ class Courses extends CI_Controller {
 
 	function update_module_status() {
 		$data = $this->course_model->module_status($this->input->post('module_ID'), $this->input->post('status'));
+	  	echo json_encode($data);
+	}
+
+	function hide_all_module() {
+		$data = $this->course_model->hide_all_module($this->input->post('module_ID'), $this->input->post('status'));
 	  	echo json_encode($data);
 	}
 
@@ -405,7 +414,7 @@ class Courses extends CI_Controller {
 	    } else {
 		    if (is_null(json_decode($this->input->post('files')))) {
 		    	$files = implode(",", array($this->input->post('files')));
-		    }else{
+		    } else {
 		    	$files = implode(",", json_decode($this->input->post('files')));
 		    }
 
@@ -471,7 +480,7 @@ class Courses extends CI_Controller {
 
 		$data = array();
 		foreach($courses as $row){
-			if($row['status'] == 1){
+			if($row['status'] == 1 && $row['privacy'] == 0){
 	            $rating = $this->review_model->get_rating(3, $row['course_ID']);
 				$data[] = array(
 					'slug' => $row['slug'],
@@ -516,15 +525,17 @@ class Courses extends CI_Controller {
 		if(!$create){
 			$data = array(
 				'error' => true,
-				'message' => 'Section title already exist.'
+				'message' => 'Lesson title already exist.'
 			);
 		} else {
-			$lesson = $this->course_model->get_lesson($this->input->post('lesson_ID'));
+			$lesson = $this->course_model->get_lesson(url_title($this->input->post('lesson_title')), $this->input->post('section_ID'));
+			$contents = $this->course_model->get_contents($lesson['id']);
 			$data = array(
-				'error' => true,
+				'error' => false,
+				'contents' => $contents,
+				'title' => $lesson['title'],
 				'lesson_ID' => $lesson['id'],
-				'section_ID' => $lesson['section_ID'],
-				'title' => $lesson['title']
+				'section_ID' => $lesson['section_ID']
 			);
 		}
 		echo json_encode($data);
@@ -535,10 +546,10 @@ class Courses extends CI_Controller {
 		if(!$create){
 			$data = array(
 				'error' => true,
-				'message' => 'Section title already exist.'
+				'message' => 'Content title already exist.'
 			);
 		} else {
-			$content = $this->course_model->get_content($this->input->post('content_ID'));
+			$content = $this->course_model->get_content(url_title($this->input->post('content_title')), $this->input->post('lesson_ID'));
 			$data = array(
 				'error' => false,
 				'content_ID' => $content['id'],

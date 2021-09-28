@@ -17,12 +17,16 @@
               <strong><?php echo ucwords($course['title']); ?></strong>
             </h2>
             <p class="card-text mb-2"><?php echo ucfirst($course['description']); ?></p>
-            <h3 class="h3-responsive text-center text-md-left ml-xl-0 ml-4">
-              <span class="red-text font-weight-bold">
-                <strong>$<?php echo $course['price']; ?></strong>
-              </span>
-            </h3>
-            <?php if($course['price'] == 0){ ?>
+            <?php if(!empty($course['price'])){ ?>
+              <h3 class="h3-responsive text-center text-md-left ml-xl-0 ml-4">
+                <span class="red-text font-weight-bold">
+                  <strong>$<?php echo $course['price']; ?></strong>
+                </span>
+              </h3>
+            <?php } ?>
+            <?php if(empty($course['price'])){ ?>
+              <a href="<?php echo base_url(); ?>support" class="btn btn-secondary">Contact Support</a>
+            <?php } else if($course['price'] == 0) { ?>
               <button type="button" class="btn btn-secondary" id="free_course">Enroll Now</button>
             <?php } else { ?>
               <div id="paypal-button-container"></div>

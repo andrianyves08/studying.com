@@ -850,6 +850,7 @@ class Pages extends CI_Controller {
         $this->form_validation->set_rules('email', 'email', 'required');
         $this->form_validation->set_rules('first_name', 'first_name', 'required');
         $this->form_validation->set_rules('last_name', 'last_name', 'required');
+        $this->form_validation->set_rules('username', 'username', 'alpha_dash');
         $this->form_validation->set_rules('password', 'password', 'required');
         $this->form_validation->set_rules('confirm_password', 'confirm password', 'required|matches[password]');
 
@@ -862,24 +863,23 @@ class Pages extends CI_Controller {
      			$this->session->set_flashdata('error', 'Email already exist!');
      			redirect('register');
 			} else {
-	
 				if(empty($this->input->post('username'))){
 					$username = str_replace(' ', '', $this->input->post('first_name')).str_replace(' ', '', $this->input->post('last_name')).date("h-i-s");
 				} else {
 					$username = $this->input->post('username');
 				}
-					$new_user = array(
-						'username' => $username,
-	                    'email' => $this->input->post('email'),
-	                    'first_name' => $this->input->post('first_name'),
-	                    'last_name' => $this->input->post('last_name'),
-	                    'password' => $this->input->post('password'),
-	                    'role' => $this->input->post('role'),
-	                    'timezone' => $this->input->post('timezone'),
-	                    'page' => '0'
-	                );
-	                $this->session->set_userdata($new_user);
-					$this->send_verification();
+				$new_user = array(
+					'username' => $username,
+                    'email' => $this->input->post('email'),
+                    'first_name' => $this->input->post('first_name'),
+                    'last_name' => $this->input->post('last_name'),
+                    'password' => $this->input->post('password'),
+                    'role' => $this->input->post('role'),
+                    'timezone' => $this->input->post('timezone'),
+                    'page' => '0'
+                );
+                $this->session->set_userdata($new_user);
+				$this->send_verification();
 			}
         }
 	}

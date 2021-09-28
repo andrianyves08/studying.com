@@ -163,6 +163,7 @@ class Instructor extends CI_Controller {
 
 		$data['course'] = $this->course_model->get_course($this->session->userdata('user_id'), NULL, NULL, NULL, $course_slug);
 		$data['students'] = $this->purchase_model->get_users_course($data['course']['course_ID'], $this->session->userdata('user_id'));
+		$data['users'] = $this->user_model->get_users();
 
 		$this->load->view('templates/instructor/header', $data);
         $this->load->view('templates/instructor/nav', $data);
@@ -481,7 +482,7 @@ class Instructor extends CI_Controller {
 	}
 
 	function isTimeValid($time) {
-	    return is_object(DateTime::createFromFormat('h:i a', $time));
+	    return is_object(DateTime::createFromFormat('h:i:s a', $time));
 	}
 
 	function create_schedule() {
@@ -498,7 +499,7 @@ class Instructor extends CI_Controller {
 	    	$time = $this->isTimeValid($this->input->post('time'));
 
 			if($time){
-				$create = $this->instructor_model->create_schedule($this->input->post('day'), $this->input->post('time'), $this->input->post('timezone'), $this->session->userdata('user_id'));
+				$create = $this->instructor_model->create_schedule($this->input->post('day'), $this->input->post('time'), $this->input->post('timezone'), $this->input->post('note'), $this->session->userdata('user_id'));
 				$data = array(
 					'error' => false
 				);

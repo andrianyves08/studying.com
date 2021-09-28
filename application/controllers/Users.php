@@ -17,12 +17,12 @@ class Users extends CI_Controller {
 	}
 
 	function approve_as_instructor() {
-		$data = $this->user_model->approve_as_instructor($this->input->post('user_ID'));
+		$data = $this->user_model->approve_as_instructor($this->input->post('id'), $this->input->post('user_ID'));
 		echo json_encode($data);
 	}
 
 	function deny_as_instructor() {
-		$data = $this->user_model->deny_as_instructor($this->input->post('user_ID'));
+		$data = $this->user_model->deny_as_instructor($this->input->post('id'), $this->input->post('user_ID'));
 		echo json_encode($data);
 	}
 
@@ -152,9 +152,11 @@ class Users extends CI_Controller {
 		$this->form_validation->set_error_delimiters('<script type="text/javascript">$(function(){toastr.error("', '")});</script>');
 		$this->form_validation->set_rules('first_name', 'Firt name', 'required');
 		$this->form_validation->set_rules('last_name', 'Last name', 'required');
+		$this->form_validation->set_rules('username', 'username', 'alpha_dash');
 
 	    if ($this->form_validation->run() === FALSE) {
 			$this->session->set_flashdata('multi',validation_errors());
+			redirect(base_url().$this->input->post('current_username'));
 	    } else {
 			$bio = '';
 			if(!empty($this->input->post('bio'))){

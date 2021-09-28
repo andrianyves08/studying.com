@@ -87,7 +87,7 @@ p, h1, h2, h3, h4, h5, h6, label, td, dt, dd, li, span, tr{
                  <a href="<?php echo base_url();?>forgot-password" class="ml-5">Forgot password?</a>
               </div>
               </form>
-              <p class="text-center">Not a member? Register here <a href="<?php base_url()?>register">Studying.com</a></p>
+              <p class="text-center">Not a member? Register here <a href="<?php base_url()?>register">register</a> or visit <a href="https://www.studying.com" target="_blank">Studying.com</a></p>
             </div><!--Card Body-->
           </div><!--Card-->
         </div><!--Column-->

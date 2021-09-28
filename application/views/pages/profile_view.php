@@ -53,10 +53,12 @@
               </thead>
               <tbody>
                 <?php foreach ($courses as $row){ ?>
-                <tr>
-                  <td><a href="<?php base_url(); ?>course/<?php echo $row['slug']; ?>" class="blue-text"><?php echo ucwords($row['title']);?></a></td>
-                  <td><a class="btn btn-primary btn-sm" href="<?php echo base_url(); ?>course/checkout/<?php echo $row['slug']?>">Buy Course</a></td>
-                </tr>
+                  <?php if($row['privacy'] == 0){ ?>
+                    <tr>
+                      <td><a href="<?php base_url(); ?>course/<?php echo $row['slug']; ?>" class="blue-text"><?php echo ucwords($row['title']);?></a></td>
+                      <td><a class="btn btn-primary btn-sm" href="<?php echo base_url(); ?>course/checkout/<?php echo $row['slug']?>">Buy Course</a></td>
+                    </tr>
+                  <?php } ?>
                 <?php } ?>
               </tbody>
             </table>
@@ -77,9 +79,11 @@
             </thead>
             <tbody>
               <?php foreach ($users_course as $row){ ?>
-              <tr>
-                <td><a href="<?php base_url(); ?>course/<?php echo $row['slug']; ?>" class="blue-text"><?php echo ucwords($row['title']);?></a></td>
-              </tr>
+                <?php if($row['privacy'] == 0){ ?>
+                  <tr>
+                    <td><a href="<?php base_url(); ?>course/<?php echo $row['slug']; ?>" class="blue-text"><?php echo ucwords($row['title']);?></a></td>
+                  </tr>
+                <?php } ?>
               <?php } ?>
             </tbody>
           </table>
